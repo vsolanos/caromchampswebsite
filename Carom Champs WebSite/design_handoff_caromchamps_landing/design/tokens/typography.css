@@ -1,0 +1,47 @@
+/* ===========================================================================
+   CaromChamps — Typography Tokens
+   Display/marketing: Montserrat (alt Sora) — strong, geometric, modern.
+   Interface & data: Inter — high legibility in tables and forms.
+   The logo wordmark is custom art and is NEVER substituted by a webfont.
+   =========================================================================== */
+
+:root {
+  /* ---- Font families ---- */
+  --cc-font-display: "Montserrat", "Sora", "Inter", system-ui, -apple-system, sans-serif;
+  --cc-font-ui: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --cc-font-data: "Inter", "Segoe UI", system-ui, sans-serif; /* pair with --cc-nums-tabular */
+
+  /* ---- Weights ---- */
+  --cc-weight-regular: 400;
+  --cc-weight-medium: 500;
+  --cc-weight-semibold: 600;
+  --cc-weight-bold: 700;
+  --cc-weight-extrabold: 800;
+
+  /* ---- Type scale (matches brand hierarchy) ---- */
+  --cc-text-display: 3.25rem;  /* 52px — landing hero */
+  --cc-text-h1: 2.5rem;        /* 40px — H1: landing, exec dashboards, covers */
+  --cc-text-h2: 1.75rem;       /* 28px — H2: product sections, modules */
+  --cc-text-h3: 1.25rem;       /* 20px — H3: cards, submodules, table titles */
+  --cc-text-body: 1rem;        /* 16px — body, forms, paragraphs */
+  --cc-text-body-sm: 0.875rem; /* 14px — dense UI, helper text */
+  --cc-text-caption: 0.75rem;  /* 12px — metadata, states, labels */
+  --cc-text-data: 1.125rem;    /* 18px — averages, caroms, ranking, KPIs */
+  --cc-text-data-lg: 2rem;     /* 32px — large KPI numerals */
+
+  /* ---- Line heights ---- */
+  --cc-leading-tight: 1.1;
+  --cc-leading-snug: 1.25;
+  --cc-leading-normal: 1.5;
+  --cc-leading-relaxed: 1.65;
+
+  /* ---- Letter spacing ---- */
+  --cc-tracking-tighter: -0.03em;
+  --cc-tracking-tight: -0.015em;
+  --cc-tracking-normal: 0;
+  --cc-tracking-wide: 0.04em;
+  --cc-tracking-caps: 0.08em;   /* uppercase overlines / labels */
+
+  /* ---- Numeric helper: tabular figures for data/metrics ---- */
+  --cc-nums-tabular: "tnum" 1, "lnum" 1; /* @kind other */
+}

@@ -1,0 +1,796 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CaromChamps · Plataforma para campeonatos de carambola a 3 bandas</title>
+<meta name="description" content="CaromChamps administra el campeonato completo de carambola a tres bandas: inscripción, grupos, partidas, planillas con IA, rankings, llaves y reportes — en una sola plataforma." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/png" href="assets/logo-mark.png" />
+<style>
+  :root{
+    --cc-azul-mesa:#245CE8;--cc-azul-profundo:#050819;--cc-rojo-carambola:#C80F1D;--cc-blanco-marfil:#F4F6EA;--cc-amarillo-carambola:#F5C116;--cc-gris-tecnico:#B3B0AE;
+    --cc-celeste-ui:#DDF7FF;--cc-verde-exito:#157A3A;--cc-naranja-accion:#C45A00;--cc-fondo-app:#F7FAFC;--cc-texto-principal:#111827;--cc-texto-secundario:#64748B;
+    --cc-blue-50:#EEF3FE;--cc-blue-100:#DBE6FD;--cc-blue-200:#B8CDFB;--cc-blue-300:#8AAAF6;--cc-blue-400:#5380F0;--cc-blue-500:#245CE8;--cc-blue-600:#1D4FCB;--cc-blue-700:#1A43A8;--cc-blue-800:#1A3A85;--cc-blue-900:#1B3469;--cc-blue-950:#050819;
+    --cc-gray-50:#F7FAFC;--cc-gray-100:#EEF2F6;--cc-gray-200:#E5E9F0;--cc-gray-300:#D5D9DE;--cc-gray-400:#B3B0AE;--cc-gray-500:#94A3B8;--cc-gray-600:#64748B;--cc-gray-700:#475569;--cc-gray-800:#1E293B;--cc-gray-900:#111827;
+    --cc-success-soft:#E3F2E9;--cc-warning-soft:#FEF4D6;--cc-action-soft:#FBEADD;--cc-danger-soft:#FBE3E5;--cc-active-soft:#E8EFFE;--cc-pending-soft:#EFEEED;
+    --cc-surface-app:var(--cc-fondo-app);--cc-surface-card:#FFFFFF;--cc-surface-active:var(--cc-celeste-ui);--cc-surface-sunken:var(--cc-gray-100);--cc-surface-table-head:var(--cc-gray-100);
+    --cc-text:var(--cc-texto-principal);--cc-text-muted:var(--cc-texto-secundario);
+    --cc-primary:var(--cc-azul-mesa);--cc-primary-hover:var(--cc-blue-600);
+    --cc-border:var(--cc-gray-200);--cc-state-warning:#9A6B00;
+    --cc-font-display:"Montserrat","Sora","Inter",system-ui,-apple-system,sans-serif;
+    --cc-font-ui:"Inter","Segoe UI",system-ui,-apple-system,sans-serif;
+    --cc-shadow-xs:0 1px 2px rgba(5,8,25,.05);
+    --cc-shadow-sm:0 1px 3px rgba(5,8,25,.06),0 1px 2px rgba(5,8,25,.04);
+    --cc-shadow-md:0 4px 12px rgba(5,8,25,.08),0 1px 3px rgba(5,8,25,.05);
+    --cc-shadow-lg:0 12px 28px rgba(5,8,25,.10),0 2px 6px rgba(5,8,25,.06);
+    --cc-shadow-xl:0 24px 56px rgba(5,8,25,.14);
+    --cc-shadow-brand:0 10px 24px rgba(36,92,232,.22);
+    --cc-ease:cubic-bezier(.22,.61,.36,1);--cc-ease-in-out:cubic-bezier(.4,0,.2,1);--cc-dur:180ms;
+    --cc-gradient-table:linear-gradient(135deg,#1A43A8 0%,#245CE8 55%,#5380F0 100%);
+    --cc-gradient-deep:linear-gradient(160deg,#0B1538 0%,#050819 100%);
+  }
+  html,body{margin:0;padding:0;background:#fff;}
+  html{scroll-behavior:smooth;scroll-padding-top:96px;}
+  *{box-sizing:border-box;}
+  ::selection{background:#B8CDFB;}
+  a{text-decoration:none;}
+
+  @keyframes cc-draw { to { stroke-dashoffset: 0; } }
+  @keyframes cc-ball { 0% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
+  @keyframes cc-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes cc-scan { 0% { top: 6%; } 100% { top: 92%; } }
+  @keyframes cc-pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+
+  /* Hover states (recreate the prototype's style-hover) */
+  .nl:hover{color:var(--cc-azul-mesa)!important;}
+  .btn-demo:hover{background:var(--cc-primary-hover)!important;box-shadow:var(--cc-shadow-brand)!important;}
+  .btn-pri:hover{background:var(--cc-blue-400)!important;}
+  .btn-out:hover{background:rgba(255,255,255,.08)!important;}
+  .card-hover{transition:box-shadow var(--cc-dur) var(--cc-ease),transform var(--cc-dur) var(--cc-ease);}
+  .card-hover:hover{box-shadow:var(--cc-shadow-md)!important;transform:translateY(-4px)!important;}
+  .ghost-cta:hover{background:var(--cc-blue-50)!important;}
+  .pri-cta:hover{background:var(--cc-primary-hover)!important;box-shadow:var(--cc-shadow-brand)!important;}
+  .blue400-cta:hover{background:var(--cc-blue-400)!important;}
+  .cta-white:hover{transform:translateY(-2px)!important;}
+  .cta-out:hover{background:rgba(255,255,255,.12)!important;}
+  .seg-btn{cursor:pointer;transition:background var(--cc-dur) var(--cc-ease),color var(--cc-dur) var(--cc-ease);}
+
+  /* Responsive */
+  @media (max-width: 1000px){
+    .nav-links{display:none!important;}
+    .hero-grid,.rank-grid,.ia-grid,.mesa-grid,.plans-grid,.lower-grid{grid-template-columns:1fr!important;}
+    .hero-mock{justify-self:center!important;margin-top:34px;}
+    .seg-grid,.stat-grid{grid-template-columns:1fr 1fr!important;}
+    .hero-h1{font-size:44px!important;}
+    .scroll-x{overflow-x:auto;}
+    .scroll-x > *{min-width:680px;}
+  }
+  @media (max-width: 600px){
+    .seg-grid,.stat-grid{grid-template-columns:1fr!important;}
+    .kpi-grid{grid-template-columns:1fr 1fr 1fr!important;}
+    .hero-h1{font-size:38px!important;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{animation:none!important;} }
+</style>
+</head>
+<body>
+<div style="font-family: var(--cc-font-ui); color: var(--cc-text); background: #fff;">
+
+  <!-- ===================== NAV ===================== -->
+  <nav style="position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,.82); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--cc-border);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px; height: 90px; display: flex; align-items: center; justify-content: space-between;">
+      <a href="#top" style="display: flex; align-items: center; gap: 11px;">
+        <img src="assets/logo-full-trim.png" alt="CaromChamps" style="height: 74px; width: auto;">
+      </a>
+      <div class="nav-links" style="display: flex; gap: 30px;">
+        <a href="#producto" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Producto</a>
+        <a href="#rendimiento" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Rendimiento</a>
+        <a href="#funciones" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Funciones</a>
+        <a href="#planes" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Planes</a>
+        <a href="#segmentos" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Segmentos</a>
+        <a href="#agenda" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Agenda</a>
+      </div>
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="/caromchampsapp/" style="font-size: 14.5px; font-weight: 600; color: var(--cc-azul-profundo);">Iniciar sesión</a>
+        <a href="#agenda" class="btn-demo" style="display: inline-flex; align-items: center; gap: 8px; height: 42px; padding: 0 18px; border-radius: 10px; background: var(--cc-primary); color: #fff; font-weight: 600; font-size: 14.5px; box-shadow: var(--cc-shadow-xs);">Solicitar demo</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===================== HERO ===================== -->
+  <header id="top" style="position: relative; overflow: hidden; background: linear-gradient(150deg, #1B3F8F 0%, #122C6B 45%, #0A1838 100%); color: #fff;">
+    <svg viewBox="0 0 1200 700" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: .38;">
+      <defs>
+        <linearGradient id="tg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#5380F0"></stop>
+          <stop offset="1" stop-color="#245CE8"></stop>
+        </linearGradient>
+      </defs>
+      <path d="M-40 540 C 260 360, 420 620, 720 380 S 1140 240, 1320 420" fill="none" stroke="url(#tg)" stroke-width="2" stroke-dasharray="1600" stroke-dashoffset="1600" style="animation: cc-draw 2.6s var(--cc-ease) .2s forwards;"></path>
+      <path d="M-40 220 C 240 300, 500 120, 760 280 S 1180 460, 1320 300" fill="none" stroke="#1A43A8" stroke-width="1.5" stroke-dasharray="1600" stroke-dashoffset="1600" style="animation: cc-draw 2.8s var(--cc-ease) .5s forwards;"></path>
+      <circle r="6" fill="#F5C116" style="offset-path: path('M-40 540 C 260 360, 420 620, 720 380 S 1140 240, 1320 420'); animation: cc-ball 7s linear 2.4s infinite;"></circle>
+      <circle r="5" fill="#F4F6EA" style="offset-path: path('M-40 220 C 240 300, 500 120, 760 280 S 1180 460, 1320 300'); animation: cc-ball 9s linear 2.8s infinite;"></circle>
+    </svg>
+    <div style="position: absolute; top: -200px; right: -140px; width: 640px; height: 640px; background: radial-gradient(circle, rgba(36,92,232,.55), transparent 62%); filter: blur(20px); pointer-events: none;"></div>
+
+    <div class="hero-grid" style="position: relative; max-width: 1200px; margin: 0 auto; padding: 86px 32px 100px; display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center;">
+      <div>
+        <img src="assets/logo-full-white.png" alt="CaromChamps" style="height: 104px; width: auto; margin: 0 0 26px; filter: drop-shadow(0 8px 28px rgba(5,8,25,.5));">
+        <br>
+        <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: var(--cc-blue-300); background: rgba(36,92,232,.16); padding: 7px 14px; border-radius: 999px; border: 1px solid rgba(36,92,232,.32);">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle></svg>
+          Especializada en carambola a 3 bandas
+        </span>
+        <h1 class="hero-h1" style="font-family: var(--cc-font-display); font-size: 58px; font-weight: 800; line-height: 1.02; letter-spacing: -.035em; margin: 22px 0 0; color: #FFFFFF; text-shadow: 0 2px 24px rgba(5,8,25,.45);">Precisión deportiva.<br><span style="color: var(--cc-amarillo-carambola);">Control digital.</span></h1>
+        <p style="font-size: 18px; line-height: 1.62; color: #DDE6F5; margin-top: 20px; max-width: 520px;">Administre el campeonato completo desde la inscripción hasta el cierre oficial: jugadores, grupos, partidas, planillas con IA, rankings, llaves y reportes — en una sola plataforma.</p>
+        <div style="display: flex; gap: 14px; margin-top: 30px; flex-wrap: wrap;">
+          <a href="#agenda" class="btn-pri" style="display: inline-flex; align-items: center; gap: 9px; height: 54px; padding: 0 28px; border-radius: 12px; background: var(--cc-primary); color: #fff; font-weight: 600; font-size: 16.5px; box-shadow: var(--cc-shadow-brand);">
+            Solicitar demo
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+          </a>
+          <a href="#producto" class="btn-out" style="display: inline-flex; align-items: center; gap: 9px; height: 54px; padding: 0 26px; border-radius: 12px; background: transparent; color: #fff; font-weight: 600; font-size: 16.5px; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.32);">Ver la plataforma</a>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; margin-top: 32px; font-size: 12.5px; color: var(--cc-gris-tecnico);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"></path><path d="M2 12h20"></path></svg>
+          Colombia · México · España · Francia · Bélgica · Alemania · Austria · Corea
+        </div>
+      </div>
+
+      <!-- floating product composition -->
+      <div class="hero-mock" style="position: relative; justify-self: end; width: 100%; max-width: 480px;">
+        <div style="border-radius: 16px; overflow: hidden; background: var(--cc-surface-card); box-shadow: 0 44px 90px rgba(0,0,0,.5); border: 1px solid rgba(255,255,255,.14); animation: cc-float 6s var(--cc-ease-in-out) infinite;">
+          <div style="display: flex; align-items: center; gap: 7px; padding: 12px 15px; background: #fff; border-bottom: 1px solid var(--cc-border);">
+            <span style="width: 11px; height: 11px; border-radius: 50%; background: #FF5F57;"></span>
+            <span style="width: 11px; height: 11px; border-radius: 50%; background: #FEBC2E;"></span>
+            <span style="width: 11px; height: 11px; border-radius: 50%; background: #28C840;"></span>
+            <span style="margin-left: 10px; font-size: 12px; color: var(--cc-text-muted);">app.caromchamps.com</span>
+          </div>
+          <div style="padding: 16px; background: var(--cc-surface-app);">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+              <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px;">
+                <div style="font-size: 11.5px; color: var(--cc-text-muted); font-weight: 500;">Promedio general</div>
+                <div style="font-family: var(--cc-font-display); font-size: 26px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums;">1.182</div>
+                <div style="font-size: 11px; color: var(--cc-verde-exito); font-weight: 600;">▲ +0.08 del torneo</div>
+              </div>
+              <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px;">
+                <div style="font-size: 11.5px; color: var(--cc-text-muted); font-weight: 500;">Partidas</div>
+                <div style="font-family: var(--cc-font-display); font-size: 26px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums;">184</div>
+                <div style="font-size: 11px; color: var(--cc-verde-exito); font-weight: 600;">▲ +46 capturadas</div>
+              </div>
+            </div>
+            <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; overflow: hidden;">
+              <div style="padding: 11px 14px; border-bottom: 1px solid var(--cc-border); display: flex; align-items: center; justify-content: space-between;">
+                <span style="font-weight: 700; font-size: 13.5px; color: var(--cc-azul-profundo);">Grupo A — Posiciones</span>
+                <span style="font-size: 11px; color: var(--cc-text-muted);">Ronda 2 de 3</span>
+              </div>
+              <div style="padding: 4px 0;">
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--cc-gray-100);">
+                  <span style="width: 22px; height: 22px; border-radius: 6px; background: var(--cc-blue-50); color: var(--cc-azul-mesa); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">1</span>
+                  <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--cc-azul-mesa); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">JP</span>
+                  <span style="flex: 1; font-size: 13px; font-weight: 600; color: var(--cc-text);">Juan Pérez</span>
+                  <span style="font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">1.428</span>
+                  <span style="font-size: 10.5px; font-weight: 700; color: var(--cc-verde-exito); background: var(--cc-success-soft); padding: 2px 8px; border-radius: 999px;">Final.</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px; border-bottom: 1px solid var(--cc-gray-100);">
+                  <span style="width: 22px; height: 22px; border-radius: 6px; background: var(--cc-gray-100); color: var(--cc-text-muted); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">2</span>
+                  <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--cc-amarillo-carambola); color: var(--cc-azul-profundo); font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">MK</span>
+                  <span style="flex: 1; font-size: 13px; font-weight: 600; color: var(--cc-text);">Min-jun Kim</span>
+                  <span style="font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">1.392</span>
+                  <span style="font-size: 10.5px; font-weight: 700; color: var(--cc-azul-mesa); background: var(--cc-active-soft); padding: 2px 8px; border-radius: 999px;">En curso</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px; padding: 9px 14px;">
+                  <span style="width: 22px; height: 22px; border-radius: 6px; background: var(--cc-gray-100); color: var(--cc-text-muted); font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center;">3</span>
+                  <span style="width: 24px; height: 24px; border-radius: 50%; background: var(--cc-rojo-carambola); color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center;">LD</span>
+                  <span style="flex: 1; font-size: 13px; font-weight: 600; color: var(--cc-text);">Léa Dubois</span>
+                  <span style="font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">1.205</span>
+                  <span style="font-size: 10.5px; font-weight: 700; color: var(--cc-text-muted); background: var(--cc-pending-soft); padding: 2px 8px; border-radius: 999px;">Pend.</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- player portrait (branded placeholder) -->
+        <div style="position: absolute; left: -34px; bottom: -30px; width: 116px; height: 116px; border-radius: 50%; padding: 4px; background: var(--cc-gradient-table); box-shadow: 0 18px 40px rgba(0,0,0,.45);">
+          <div style="width: 108px; height: 108px; border-radius: 50%; overflow: hidden; background: linear-gradient(135deg,#1A43A8,#245CE8);">
+            <img src="assets/hero-player.jpg" alt="Jugador de carambola a 3 bandas" onerror="this.style.display='none'" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 26%; display: block;" />
+          </div>
+        </div>
+        <!-- three balls motif -->
+        <div style="position: absolute; right: -14px; top: -18px; display: flex; gap: 8px;">
+          <span style="width: 18px; height: 18px; border-radius: 50%; background: #F4F6EA; box-shadow: 0 4px 10px rgba(0,0,0,.4);"></span>
+          <span style="width: 18px; height: 18px; border-radius: 50%; background: var(--cc-amarillo-carambola); box-shadow: 0 4px 10px rgba(0,0,0,.4);"></span>
+          <span style="width: 18px; height: 18px; border-radius: 50%; background: var(--cc-rojo-carambola); box-shadow: 0 4px 10px rgba(0,0,0,.4);"></span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===================== STAT BAND ===================== -->
+  <div style="border-bottom: 1px solid var(--cc-border); background: #fff;">
+    <div class="stat-grid" style="max-width: 1200px; margin: 0 auto; padding: 40px 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
+      <div style="text-align: center;">
+        <div style="font-family: var(--cc-font-display); font-weight: 800; font-size: 38px; color: var(--cc-azul-mesa); letter-spacing: -.025em; font-variant-numeric: tabular-nums;"><span data-count="8" data-suffix="">8</span></div>
+        <div style="font-size: 13.5px; color: var(--cc-text-muted); margin-top: 4px;">mercados prioritarios</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-family: var(--cc-font-display); font-weight: 800; font-size: 38px; color: var(--cc-azul-mesa); letter-spacing: -.025em; font-variant-numeric: tabular-nums;"><span data-count="8" data-suffix="">8</span></div>
+        <div style="font-size: 13.5px; color: var(--cc-text-muted); margin-top: 4px;">módulos operativos</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-family: var(--cc-font-display); font-weight: 800; font-size: 38px; color: var(--cc-azul-mesa); letter-spacing: -.025em; font-variant-numeric: tabular-nums;"><span data-count="100" data-suffix="%">100%</span></div>
+        <div style="font-size: 13.5px; color: var(--cc-text-muted); margin-top: 4px;">operación digital</div>
+      </div>
+      <div style="text-align: center;">
+        <div style="font-family: var(--cc-font-display); font-weight: 800; font-size: 38px; color: var(--cc-azul-mesa); letter-spacing: -.025em; font-variant-numeric: tabular-nums;"><span data-count="5" data-suffix="">5</span></div>
+        <div style="font-size: 13.5px; color: var(--cc-text-muted); margin-top: 4px;">idiomas de localización</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== PLATAFORMA (LIVE DEMO) ===================== -->
+  <section id="producto" style="background: var(--cc-gradient-deep); padding: 96px 0; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: 40px; left: 50%; transform: translateX(-50%); width: 900px; height: 500px; background: radial-gradient(circle, rgba(36,92,232,.35), transparent 65%); filter: blur(30px); pointer-events: none;"></div>
+    <div style="position: relative; max-width: 1240px; margin: 0 auto; padding: 0 32px;">
+      <div style="text-align: center; max-width: 720px; margin: 0 auto;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-blue-300);">La plataforma</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 40px; font-weight: 800; letter-spacing: -.03em; color: #fff; margin: 12px 0 0; line-height: 1.08;">Toda la operación del torneo, en vivo</h2>
+        <p style="font-size: 17px; color: #C9D2E3; margin-top: 14px; line-height: 1.6;">Explore los módulos reales de CaromChamps. El recorrido avanza solo por cada sección — y se pausa cuando usted toma el control.</p>
+      </div>
+      <div style="margin-top: 44px;">
+        <iframe src="/demo/" title="Demo interactiva de la plataforma CaromChamps" loading="lazy" style="display: block; width: 100%; height: 760px; border: 0;"></iframe>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FUNCIONES ===================== -->
+  <section id="funciones" style="padding: 96px 0; background: #fff;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px;">
+      <div style="max-width: 720px;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-azul-mesa);">Funciones</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 12px 0 0; line-height: 1.08;">Más que llaves: una plataforma de operación deportiva</h2>
+        <p style="font-size: 17px; color: var(--cc-text-muted); margin-top: 14px; line-height: 1.6;">CaromChamps cubre el ciclo completo del campeonato y lo convierte en historial deportivo útil.</p>
+      </div>
+      <div class="feat-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 22px; margin-top: 46px;">
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Especialización real</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Diseñada para la lógica competitiva de la carambola a 3 bandas, no un generador genérico de llaves.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"/><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Operación completa</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Inscripción, grupos, calendario, partidas, llaves, reportes y cierre — todo el ciclo del campeonato.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><path d="M7 12h10"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Planillas oficiales con QR</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Planillas con estructura deportiva real, códigos y QR para control y trazabilidad.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Planillas IA / OCR</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Lectura inteligente de planillas en PDF o imagen para reducir el trabajo manual.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Historial y rendimiento</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Historial deportivo por jugador: promedio, carambolas, entradas y evolución por partida en todos los campeonatos.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Torneo de ranking</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Agrupe varios campeonatos, controle el puntaje por jugador y defina al campeón general acumulado.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Reportería institucional</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Reporte 5, acta final y documentación oficial lista para clubes, asociaciones y federaciones.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><path d="M6 21V9a9 9 0 0 0 9 9"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Múltiples formatos de campeonato</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Eliminación simple, fase de grupos + eliminación simple, doble fase de grupos y control por sets.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Conformación flexible de grupos</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Sorteo aleatorio (random), por cabezas de grupo y esquemas tipo snake para un balance justo.</div>
+        </div>
+        <div data-reveal class="card-hover" style="background: var(--cc-surface-card); border: 1px solid var(--cc-border); border-radius: 16px; padding: 28px; box-shadow: var(--cc-shadow-xs);">
+          <span style="display: inline-flex; padding: 13px; border-radius: 13px; background: var(--cc-blue-50); color: var(--cc-azul-mesa);"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 18px;">Dashboard multi-campeonato</div>
+          <div style="font-size: 14.5px; color: var(--cc-text-muted); line-height: 1.62; margin-top: 9px;">Tablero ejecutivo con KPIs y control de todos los campeonatos activos a la vez.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== HISTORIAL Y RENDIMIENTO ===================== -->
+  <section id="rendimiento" style="padding: 96px 0; background: var(--cc-blanco-marfil);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px;">
+      <div style="max-width: 760px;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-azul-mesa);">Historial y rendimiento</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 12px 0 0; line-height: 1.08;">El historial deportivo de cada jugador, vivo</h2>
+        <p style="font-size: 17px; color: var(--cc-text-muted); margin-top: 14px; line-height: 1.6;">Promedio, carambolas, entradas y evolución por partida — consolidado en todos los campeonatos. Convierta cada resultado en historial oficial y análisis de rendimiento.</p>
+      </div>
+
+      <div class="scroll-x" data-reveal style="margin-top: 40px; border-radius: 20px; overflow: hidden; box-shadow: var(--cc-shadow-xl); border: 1px solid var(--cc-border); background: #fff;">
+       <div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 22px 26px; background: linear-gradient(135deg, #1A43A8 0%, #245CE8 100%); color: #fff;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="width: 46px; height: 46px; border-radius: 50%; background: rgba(255,255,255,.16); display: flex; align-items: center; justify-content: center; font-family: var(--cc-font-display); font-weight: 800; font-size: 16px;">ÓB</span>
+            <div>
+              <div style="font-family: var(--cc-font-display); font-weight: 800; font-size: 21px; letter-spacing: -.02em;">Historial de jugador · Óscar Barquero</div>
+              <div style="font-size: 12.5px; color: rgba(255,255,255,.8); margin-top: 2px;">Todos los campeonatos · País CR · Asociación ASOBIGRE</div>
+            </div>
+          </div>
+          <span style="font-size: 13px; font-weight: 600; color: var(--cc-azul-mesa); background: #fff; padding: 9px 18px; border-radius: 999px;">Cerrar</span>
+        </div>
+
+        <div style="padding: 22px 26px 28px; background: var(--cc-surface-app);">
+          <div class="kpi-grid" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 14px;">
+            <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--cc-shadow-xs);"><div style="font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--cc-text-muted);">PJ</div><div style="font-family: var(--cc-font-display); font-size: 28px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: 4px;">14</div></div>
+            <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--cc-shadow-xs);"><div style="font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--cc-text-muted);">PG</div><div style="font-family: var(--cc-font-display); font-size: 28px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: 4px;">8</div></div>
+            <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--cc-shadow-xs);"><div style="font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--cc-text-muted);">PP</div><div style="font-family: var(--cc-font-display); font-size: 28px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: 4px;">6</div></div>
+            <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--cc-shadow-xs);"><div style="font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--cc-text-muted);">CAR</div><div style="font-family: var(--cc-font-display); font-size: 28px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: 4px;">331</div></div>
+            <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--cc-shadow-xs);"><div style="font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--cc-text-muted);">ENT</div><div style="font-family: var(--cc-font-display); font-size: 28px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: 4px;">402</div></div>
+            <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 12px; padding: 14px 16px; box-shadow: var(--cc-shadow-xs);"><div style="font-size: 11.5px; font-weight: 600; letter-spacing: .03em; color: var(--cc-text-muted);">AVG total</div><div style="font-family: var(--cc-font-display); font-size: 28px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.02em; font-variant-numeric: tabular-nums; margin-top: 4px;">0.823</div></div>
+          </div>
+
+          <div style="margin-top: 18px; background: #fff; border: 1px solid var(--cc-border); border-radius: 14px; overflow: hidden; box-shadow: var(--cc-shadow-xs);">
+            <div style="padding: 16px 20px;">
+              <div style="font-family: var(--cc-font-display); font-weight: 700; font-size: 16px; color: var(--cc-azul-profundo);">Promedios por campeonato</div>
+              <div style="font-size: 12.5px; color: var(--cc-text-muted); margin-top: 2px;">Seleccione un campeonato para consultar sus partidas y gráfico individual.</div>
+            </div>
+            <div style="display: grid; grid-template-columns: 2.4fr 1.1fr .5fr .5fr .6fr .6fr .8fr .9fr; gap: 8px; padding: 10px 20px; background: var(--cc-surface-table-head); border-top: 1px solid var(--cc-border); border-bottom: 1px solid var(--cc-border); font-size: 11px; font-weight: 700; letter-spacing: .04em; color: var(--cc-text-muted); text-transform: uppercase;">
+              <span>Campeonato</span><span>Estado</span><span style="text-align:right;">PJ</span><span style="text-align:right;">PG</span><span style="text-align:right;">CAR</span><span style="text-align:right;">ENT</span><span style="text-align:right;">AVG</span><span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 2.4fr 1.1fr .5fr .5fr .6fr .6fr .8fr .9fr; gap: 8px; align-items: center; padding: 13px 20px; border-bottom: 1px solid var(--cc-gray-100);">
+              <span style="font-size: 13.5px; font-weight: 600; color: var(--cc-text);">Campeonato Nacional Primera División</span>
+              <span><span style="font-size: 10.5px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; border-radius: 999px; color: var(--cc-azul-mesa); background: var(--cc-active-soft);">DEMO_READY</span></span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">7</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">4</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">186</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">208</span>
+              <span style="text-align:right; font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">0.894</span>
+              <span style="text-align:right;"><span style="font-size: 12px; font-weight: 600; color: var(--cc-azul-mesa);">Ver partidas →</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 2.4fr 1.1fr .5fr .5fr .6fr .6fr .8fr .9fr; gap: 8px; align-items: center; padding: 13px 20px; border-bottom: 1px solid var(--cc-gray-100);">
+              <span style="font-size: 13.5px; font-weight: 600; color: var(--cc-text);">Ranking No 2</span>
+              <span><span style="font-size: 10.5px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; border-radius: 999px; color: var(--cc-state-warning); background: var(--cc-warning-soft);">GROUPS_CLOSED</span></span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">7</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">4</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">145</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">194</span>
+              <span style="text-align:right; font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">0.747</span>
+              <span style="text-align:right;"><span style="font-size: 12px; font-weight: 600; color: var(--cc-azul-mesa);">Ver partidas →</span></span>
+            </div>
+            <div style="display: grid; grid-template-columns: 2.4fr 1.1fr .5fr .5fr .6fr .6fr .8fr .9fr; gap: 8px; align-items: center; padding: 13px 20px;">
+              <span style="font-size: 13.5px; font-weight: 600; color: var(--cc-text);">Campeonato Nuevo · Doble Fase de Grupos</span>
+              <span><span style="font-size: 10.5px; font-weight: 700; letter-spacing: .02em; padding: 3px 9px; border-radius: 999px; color: var(--cc-gray-600); background: var(--cc-pending-soft);">CONFIGURED</span></span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">0</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">0</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">0</span>
+              <span style="text-align:right; font-size: 13px; color: var(--cc-text); font-variant-numeric: tabular-nums;">0</span>
+              <span style="text-align:right; font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">0.000</span>
+              <span style="text-align:right;"><span style="font-size: 12px; font-weight: 600; color: var(--cc-azul-mesa);">Ver partidas →</span></span>
+            </div>
+          </div>
+
+          <div style="margin-top: 18px; background: #fff; border: 1px solid var(--cc-border); border-radius: 14px; padding: 20px; box-shadow: var(--cc-shadow-xs);">
+            <div style="font-family: var(--cc-font-display); font-weight: 700; font-size: 16px; color: var(--cc-azul-profundo);">Comportamiento de promedio por partida</div>
+            <div style="margin-top: 14px; background: var(--cc-surface-sunken); border-radius: 12px; padding: 16px 14px;">
+              <svg viewBox="0 0 760 220" style="width: 100%; height: auto; display: block;">
+                <line x1="44" y1="20" x2="44" y2="180" stroke="var(--cc-gray-300)" stroke-width="1"></line>
+                <line x1="44" y1="180" x2="740" y2="180" stroke="var(--cc-gray-300)" stroke-width="1"></line>
+                <text x="36" y="26" text-anchor="end" font-family="Inter" font-size="11" fill="#64748B">1.650</text>
+                <text x="36" y="104" text-anchor="end" font-family="Inter" font-size="11" fill="#64748B">0.823</text>
+                <text x="36" y="184" text-anchor="end" font-family="Inter" font-size="11" fill="#64748B">0.000</text>
+                <polyline points="80,120 138,128 196,160 254,46 312,118 370,112 428,78 486,158 544,58 602,160 660,98 718,124" fill="none" stroke="var(--cc-azul-mesa)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>
+                <circle cx="80" cy="120" r="7" fill="var(--cc-rojo-carambola)" stroke="#fff" stroke-width="2"></circle>
+                <circle cx="138" cy="128" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="196" cy="160" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="254" cy="46" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="312" cy="118" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="370" cy="112" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="428" cy="78" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="486" cy="158" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="544" cy="58" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="602" cy="160" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="660" cy="98" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <circle cx="718" cy="124" r="5" fill="var(--cc-amarillo-carambola)"></circle>
+                <text x="80" y="200" text-anchor="middle" font-family="Inter" font-size="10" fill="#94A3B8">P-014</text>
+                <text x="254" y="200" text-anchor="middle" font-family="Inter" font-size="10" fill="#94A3B8">P-072</text>
+                <text x="486" y="200" text-anchor="middle" font-family="Inter" font-size="10" fill="#94A3B8">P-085</text>
+                <text x="718" y="200" text-anchor="middle" font-family="Inter" font-size="10" fill="#94A3B8">P-064</text>
+              </svg>
+            </div>
+            <div style="margin-top: 14px; background: var(--cc-celeste-ui); border-radius: 10px; padding: 13px 16px;">
+              <div style="font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo);">P-014 · Grupo 3</div>
+              <div style="font-size: 12.5px; color: var(--cc-text-muted); margin-top: 3px;">AVG 0.933 · 28 carambolas / 30 entradas · Marcador 28–35 · Estado: Finalizada</div>
+            </div>
+          </div>
+        </div>
+       </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TORNEO DE RANKING ===================== -->
+  <section id="ranking" style="padding: 96px 0; background: linear-gradient(150deg, #16357C 0%, #0C1E48 100%); color: #fff; position: relative; overflow: hidden;">
+    <div style="position: absolute; top: -120px; right: -100px; width: 520px; height: 520px; background: radial-gradient(circle, rgba(245,193,22,.18), transparent 64%); filter: blur(20px); pointer-events: none;"></div>
+    <div class="rank-grid" style="position: relative; max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: .95fr 1.05fr; gap: 56px; align-items: center;">
+      <div>
+        <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--cc-azul-profundo); background: var(--cc-amarillo-carambola); padding: 6px 12px; border-radius: 999px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+          Torneo de ranking
+        </span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.03em; margin: 18px 0 0; line-height: 1.08; color: #FFFFFF;">Un campeón general a través de varios campeonatos</h2>
+        <p style="font-size: 17px; color: #C9D2E3; margin-top: 14px; line-height: 1.62;">Cree un torneo de ranking que agrupa varios campeonatos, controle el puntaje de cada jugador en cada uno y defina automáticamente al campeón general acumulado.</p>
+        <div style="display: flex; flex-direction: column; gap: 13px; margin-top: 24px;">
+          <div style="display: flex; align-items: center; gap: 11px; font-size: 15px; color: #E7EDF8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cc-amarillo-carambola)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Agrupe varios campeonatos en un solo ranking</div>
+          <div style="display: flex; align-items: center; gap: 11px; font-size: 15px; color: #E7EDF8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cc-amarillo-carambola)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Puntaje por jugador en cada campeonato</div>
+          <div style="display: flex; align-items: center; gap: 11px; font-size: 15px; color: #E7EDF8;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cc-amarillo-carambola)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Tabla acumulada y campeón general automático</div>
+        </div>
+      </div>
+      <div class="scroll-x" style="background: #fff; color: var(--cc-text); border-radius: 18px; box-shadow: 0 30px 70px rgba(0,0,0,.4); overflow: hidden;">
+       <div>
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 18px 22px; border-bottom: 1px solid var(--cc-border);">
+          <div>
+            <div style="font-family: var(--cc-font-display); font-weight: 700; font-size: 16px; color: var(--cc-azul-profundo);">Ranking General 2026</div>
+            <div style="font-size: 12px; color: var(--cc-text-muted);">4 campeonatos · 64 jugadores</div>
+          </div>
+          <span style="font-size: 11px; font-weight: 700; color: var(--cc-azul-mesa); background: var(--cc-active-soft); padding: 5px 11px; border-radius: 999px;">En curso</span>
+        </div>
+        <div style="display: grid; grid-template-columns: .5fr 2fr .7fr .7fr .7fr .7fr .9fr; gap: 6px; padding: 10px 22px; background: var(--cc-surface-table-head); border-bottom: 1px solid var(--cc-border); font-size: 11px; font-weight: 700; letter-spacing: .03em; color: var(--cc-text-muted); text-transform: uppercase;">
+          <span>#</span><span>Jugador</span><span style="text-align:right;">C1</span><span style="text-align:right;">C2</span><span style="text-align:right;">C3</span><span style="text-align:right;">C4</span><span style="text-align:right;">Total</span>
+        </div>
+        <div style="display: grid; grid-template-columns: .5fr 2fr .7fr .7fr .7fr .7fr .9fr; gap: 6px; align-items: center; padding: 12px 22px; border-bottom: 1px solid var(--cc-gray-100); background: var(--cc-warning-soft);">
+          <span style="font-size: 13px; font-weight: 800; color: #C45A00; font-variant-numeric: tabular-nums;">1</span>
+          <span style="display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--cc-text);"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#C45A00" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>Óscar Barquero</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">95</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">88</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">92</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">90</span>
+          <span style="text-align:right; font-family: var(--cc-font-display); font-size: 15px; font-weight: 800; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">365</span>
+        </div>
+        <div style="display: grid; grid-template-columns: .5fr 2fr .7fr .7fr .7fr .7fr .9fr; gap: 6px; align-items: center; padding: 12px 22px; border-bottom: 1px solid var(--cc-gray-100); background: #fff;">
+          <span style="font-size: 13px; font-weight: 800; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">2</span>
+          <span style="display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--cc-text);">Daniel Acosta</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">90</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">92</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">80</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">85</span>
+          <span style="text-align:right; font-family: var(--cc-font-display); font-size: 15px; font-weight: 800; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">347</span>
+        </div>
+        <div style="display: grid; grid-template-columns: .5fr 2fr .7fr .7fr .7fr .7fr .9fr; gap: 6px; align-items: center; padding: 12px 22px; border-bottom: 1px solid var(--cc-gray-100); background: #fff;">
+          <span style="font-size: 13px; font-weight: 800; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">3</span>
+          <span style="display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--cc-text);">Greivin López</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">82</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">78</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">88</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">84</span>
+          <span style="text-align:right; font-family: var(--cc-font-display); font-size: 15px; font-weight: 800; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">332</span>
+        </div>
+        <div style="display: grid; grid-template-columns: .5fr 2fr .7fr .7fr .7fr .7fr .9fr; gap: 6px; align-items: center; padding: 12px 22px; border-bottom: 1px solid var(--cc-gray-100); background: #fff;">
+          <span style="font-size: 13px; font-weight: 800; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">4</span>
+          <span style="display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--cc-text);">Marvin Chacón</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">75</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">80</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">76</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">82</span>
+          <span style="text-align:right; font-family: var(--cc-font-display); font-size: 15px; font-weight: 800; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">313</span>
+        </div>
+        <div style="display: grid; grid-template-columns: .5fr 2fr .7fr .7fr .7fr .7fr .9fr; gap: 6px; align-items: center; padding: 12px 22px; border-bottom: 1px solid var(--cc-gray-100); background: #fff;">
+          <span style="font-size: 13px; font-weight: 800; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">5</span>
+          <span style="display: flex; align-items: center; gap: 9px; font-size: 13.5px; font-weight: 600; color: var(--cc-text);">Pablo Beltrán</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">70</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">74</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">79</span>
+          <span style="text-align:right; font-size: 13px; color: var(--cc-text-muted); font-variant-numeric: tabular-nums;">72</span>
+          <span style="text-align:right; font-family: var(--cc-font-display); font-size: 15px; font-weight: 800; color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">295</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 22px; background: var(--cc-blanco-marfil);">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--cc-amarillo-carambola)" stroke-width="2.2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>
+          <span style="font-size: 13px; color: var(--cc-text);"><b style="color: var(--cc-azul-profundo);">Óscar Barquero</b> lidera el ranking general · campeón provisional</span>
+        </div>
+       </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLANILLAS IA SPOTLIGHT ===================== -->
+  <section style="padding: 96px 0; background: var(--cc-surface-app);">
+    <div class="ia-grid" style="max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: center;">
+      <div>
+        <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--cc-azul-mesa); background: var(--cc-blue-50); padding: 6px 12px; border-radius: 999px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962L8.5 9.936A2 2 0 0 0 9.937 8.5l1.582-6.135a.5.5 0 0 1 .962 0L14.063 8.5A2 2 0 0 0 15.5 9.937l6.135 1.581a.5.5 0 0 1 0 .964L15.5 14.063a2 2 0 0 0-1.437 1.437l-1.582 6.135a.5.5 0 0 1-.962 0z"></path></svg>
+          Planillas IA / OCR
+        </span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 36px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 18px 0 0; line-height: 1.1;">Digitalice la planilla oficial en segundos</h2>
+        <p style="font-size: 17px; color: var(--cc-text-muted); margin-top: 14px; line-height: 1.62;">Suba la planilla en PDF o foto y CaromChamps lee jugadores, entradas y carambolas automáticamente. Usted solo revisa, valida y cierra — con total trazabilidad.</p>
+        <div style="display: flex; flex-direction: column; gap: 13px; margin-top: 24px;">
+          <div style="display: flex; align-items: center; gap: 11px; font-size: 15px; color: var(--cc-text);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Lectura automática de entradas y carambolas</div>
+          <div style="display: flex; align-items: center; gap: 11px; font-size: 15px; color: var(--cc-text);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Cálculo de promedio (AVG) al instante</div>
+          <div style="display: flex; align-items: center; gap: 11px; font-size: 15px; color: var(--cc-text);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Códigos QR para control y auditoría</div>
+        </div>
+      </div>
+      <div style="position: relative;">
+        <div style="position: relative; background: #fff; border: 1px solid var(--cc-border); border-radius: 18px; box-shadow: var(--cc-shadow-lg); overflow: hidden; padding: 22px;">
+          <div style="position: absolute; left: 22px; right: 22px; height: 2px; background: linear-gradient(90deg, transparent, var(--cc-azul-mesa), transparent); box-shadow: 0 0 14px 2px rgba(36,92,232,.6); animation: cc-scan 2.8s var(--cc-ease-in-out) infinite;"></div>
+          <div style="display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--cc-border); padding-bottom: 12px;">
+            <div>
+              <div style="font-family: var(--cc-font-display); font-weight: 700; font-size: 15px; color: var(--cc-azul-profundo);">Planilla oficial · Partida 184</div>
+              <div style="font-size: 12px; color: var(--cc-text-muted);">Copa Nacional 3 Bandas 2026</div>
+            </div>
+            <span style="font-size: 11px; font-weight: 700; color: var(--cc-state-warning); background: var(--cc-warning-soft); padding: 4px 10px; border-radius: 999px;">Revisando IA</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px;">
+            <div style="background: var(--cc-surface-app); border: 1px solid var(--cc-border); border-radius: 10px; padding: 12px;"><div style="font-size: 11px; color: var(--cc-text-muted);">Jugador A · Caudron</div><div style="font-size: 13px; color: var(--cc-text-muted); margin-top: 6px;">Entradas <b style="color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">28</b> · Carambolas <b style="color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">40</b></div><div style="font-size: 13px; margin-top: 4px;">AVG <b style="color: var(--cc-azul-mesa); font-variant-numeric: tabular-nums;">1.428</b></div></div>
+            <div style="background: var(--cc-surface-app); border: 1px solid var(--cc-border); border-radius: 10px; padding: 12px;"><div style="font-size: 11px; color: var(--cc-text-muted);">Jugador B · Jaspers</div><div style="font-size: 13px; color: var(--cc-text-muted); margin-top: 6px;">Entradas <b style="color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">28</b> · Carambolas <b style="color: var(--cc-azul-profundo); font-variant-numeric: tabular-nums;">38</b></div><div style="font-size: 13px; margin-top: 4px;">AVG <b style="color: var(--cc-azul-mesa); font-variant-numeric: tabular-nums;">1.357</b></div></div>
+          </div>
+          <div style="display: flex; align-items: center; gap: 12px; margin-top: 16px; padding: 12px; background: var(--cc-celeste-ui); border-radius: 10px;">
+            <svg width="54" height="54" viewBox="0 0 24 24" fill="none" stroke="var(--cc-azul-profundo)" stroke-width="1.6"><rect width="5" height="5" x="3" y="3" rx="1"></rect><rect width="5" height="5" x="16" y="3" rx="1"></rect><rect width="5" height="5" x="3" y="16" rx="1"></rect><path d="M21 16h-3a2 2 0 0 0-2 2v3"></path><path d="M21 21v.01"></path><path d="M12 7v3a2 2 0 0 1-2 2H7"></path><path d="M3 12h.01"></path><path d="M12 3h.01"></path><path d="M12 16v.01"></path><path d="M16 12h1"></path><path d="M21 12v.01"></path><path d="M12 21v-1"></path></svg>
+            <div><div style="font-size: 13px; font-weight: 700; color: var(--cc-azul-profundo);">Trazabilidad QR</div><div style="font-size: 12px; color: var(--cc-text-muted);">Acta verificable y auditable</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MESAS DE COMPETICIÓN ===================== -->
+  <section style="padding: 96px 0; background: #fff;">
+    <div class="mesa-grid" style="max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: 1.1fr .9fr; gap: 52px; align-items: center;">
+      <div style="position: relative; border-radius: 20px; overflow: hidden; box-shadow: var(--cc-shadow-lg); background: var(--cc-azul-profundo);">
+        <img src="assets/escenario-bolas.jpg" alt="Mesa de competición de carambola a 3 bandas" onerror="this.style.display='none'" style="display: block; width: 100%; height: 420px; object-fit: cover;" />
+      </div>
+      <div>
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-azul-mesa);">El escenario</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 36px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 12px 0 0; line-height: 1.1;">Mesas de competición a la altura del campeonato</h2>
+        <p style="font-size: 17px; color: var(--cc-text-muted); margin-top: 14px; line-height: 1.62;">Documente cada mesa, sala y escenario de su torneo. CaromChamps acompaña la operación profesional sobre la superficie donde se decide cada carambola.</p>
+        <div style="display: flex; gap: 12px; margin-top: 26px; flex-wrap: wrap;">
+          <span style="font-size: 13px; font-weight: 600; color: var(--cc-azul-profundo); background: var(--cc-blanco-marfil); border: 1px solid #E6E7DA; padding: 9px 15px; border-radius: 999px;">Superficie de competición</span>
+          <span style="font-size: 13px; font-weight: 600; color: var(--cc-azul-profundo); background: var(--cc-blanco-marfil); border: 1px solid #E6E7DA; padding: 9px 15px; border-radius: 999px;">Asignación de mesas por partida</span>
+          <span style="font-size: 13px; font-weight: 600; color: var(--cc-azul-profundo); background: var(--cc-blanco-marfil); border: 1px solid #E6E7DA; padding: 9px 15px; border-radius: 999px;">Control de sala y horarios</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== PLANES ===================== -->
+  <section id="planes" style="padding: 96px 0; background: var(--cc-surface-app);">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px;">
+      <div style="text-align: center; max-width: 640px; margin: 0 auto;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-azul-mesa);">Planes</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 12px 0 0; line-height: 1.08;">Precios simples, valor especializado</h2>
+        <p style="font-size: 17px; color: var(--cc-text-muted); margin-top: 14px; line-height: 1.6;">Mantenga el control sin pagar por un genérico de torneos.</p>
+      </div>
+      <div style="display: flex; gap: 4px; padding: 4px; background: var(--cc-gray-100); border-radius: 999px; width: fit-content; margin: 28px auto 0;">
+        <button id="planMensual" class="seg-btn" style="border:none;background:transparent;padding:8px 18px;border-radius:999px;font-family:var(--cc-font-ui);font-size:14px;font-weight:600;color:var(--cc-text-muted);display:inline-flex;align-items:center;gap:7px;">Mensual</button>
+        <button id="planAnual" class="seg-btn" style="border:none;background:#fff;padding:8px 18px;border-radius:999px;font-family:var(--cc-font-ui);font-size:14px;font-weight:600;color:var(--cc-azul-mesa);box-shadow:var(--cc-shadow-xs);display:inline-flex;align-items:center;gap:7px;">Anual <span style="font-size: 11px; font-weight: 700; color: var(--cc-verde-exito); background: var(--cc-success-soft); padding: 2px 7px; border-radius: 999px;">−2 meses</span></button>
+      </div>
+      <div class="plans-grid" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 36px; align-items: start;">
+        <!-- Starter -->
+        <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 20px; padding: 30px; box-shadow: var(--cc-shadow-sm);">
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo);">Starter</div>
+          <div style="display: flex; align-items: baseline; gap: 5px; margin-top: 10px;"><span style="font-family: var(--cc-font-display); font-size: 42px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.03em;">$0</span><span style="font-size: 15px; color: var(--cc-text-muted);">Para siempre</span></div>
+          <div style="font-size: 14px; color: var(--cc-text-muted); margin-top: 10px; line-height: 1.55;">Prueba y torneos pequeños.</div>
+          <a href="/caromchampsapp/" class="ghost-cta" style="display: flex; align-items: center; justify-content: center; height: 46px; margin: 22px 0; border-radius: 10px; background: #fff; color: var(--cc-azul-mesa); font-weight: 600; font-size: 15px; box-shadow: inset 0 0 0 1.5px var(--cc-blue-200);">Empezar gratis</a>
+          <div style="display: flex; flex-direction: column; gap: 11px;">
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Hasta 5 campeonatos</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>60 jugadores por torneo</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Grupos y partidas básicas</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Resultados básicos</div>
+          </div>
+        </div>
+        <!-- Club (featured) -->
+        <div style="position: relative; background: #fff; border: 2px solid var(--cc-azul-mesa); border-radius: 20px; padding: 30px; box-shadow: var(--cc-shadow-lg);">
+          <span style="position: absolute; top: -13px; left: 30px; background: var(--cc-azul-mesa); color: #fff; font-size: 11.5px; font-weight: 700; padding: 5px 13px; border-radius: 999px;">Más popular</span>
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo);">Club</div>
+          <div style="display: flex; align-items: baseline; gap: 5px; margin-top: 10px;"><span id="clubPrice" style="font-family: var(--cc-font-display); font-size: 42px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.03em; font-variant-numeric: tabular-nums;">$200</span><span class="perLabel" style="font-size: 15px; color: var(--cc-text-muted);">/año</span></div>
+          <div style="font-size: 14px; color: var(--cc-text-muted); margin-top: 10px; line-height: 1.55;">Clubes y salas que profesionalizan sus torneos.</div>
+          <a href="/caromchampsapp/" class="pri-cta" style="display: flex; align-items: center; justify-content: center; height: 46px; margin: 22px 0; border-radius: 10px; background: var(--cc-primary); color: #fff; font-weight: 600; font-size: 15px; box-shadow: var(--cc-shadow-xs);">Elegir Club</a>
+          <div style="display: flex; flex-direction: column; gap: 11px;">
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Hasta 20 campeonatos</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>120 jugadores por torneo</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Planillas, llaves y calendario</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Reportes básicos e histórico</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Exportación de historial</div>
+          </div>
+        </div>
+        <!-- Pro -->
+        <div style="background: #fff; border: 1px solid var(--cc-border); border-radius: 20px; padding: 30px; box-shadow: var(--cc-shadow-sm);">
+          <div style="font-family: var(--cc-font-display); font-size: 19px; font-weight: 700; color: var(--cc-azul-profundo);">Pro</div>
+          <div style="display: flex; align-items: baseline; gap: 5px; margin-top: 10px;"><span id="proPrice" style="font-family: var(--cc-font-display); font-size: 42px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.03em; font-variant-numeric: tabular-nums;">$500</span><span class="perLabel" style="font-size: 15px; color: var(--cc-text-muted);">/año</span></div>
+          <div style="font-size: 14px; color: var(--cc-text-muted); margin-top: 10px; line-height: 1.55;">Asociaciones y operadores de alto volumen.</div>
+          <a href="/caromchampsapp/" class="ghost-cta" style="display: flex; align-items: center; justify-content: center; height: 46px; margin: 22px 0; border-radius: 10px; background: #fff; color: var(--cc-azul-mesa); font-weight: 600; font-size: 15px; box-shadow: inset 0 0 0 1.5px var(--cc-blue-200);">Elegir Pro</a>
+          <div style="display: flex; flex-direction: column; gap: 11px;">
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Campeonatos y jugadores ilimitados</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Reportería avanzada · Reporte 5</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Acta final e histórico completo</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Planillas QR + IA / OCR</div>
+            <div style="display: flex; align-items: center; gap: 9px; font-size: 14px; color: var(--cc-text);"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--cc-verde-exito)" stroke-width="2.4"><path d="M20 6 9 17l-5-5"></path></svg>Dashboard multi-campeonato</div>
+          </div>
+        </div>
+      </div>
+      <div class="lower-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: 22px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; background: #fff; border: 1px solid var(--cc-border); border-radius: 20px; padding: 28px; box-shadow: var(--cc-shadow-sm); flex-wrap: wrap;">
+          <div>
+            <span style="display: inline-flex; font-size: 12px; font-weight: 700; color: var(--cc-azul-mesa); background: var(--cc-blue-50); padding: 4px 11px; border-radius: 999px;">Evento On Demand</span>
+            <div style="font-family: var(--cc-font-display); font-size: 30px; font-weight: 800; color: var(--cc-azul-profundo); letter-spacing: -.03em; margin-top: 12px;">desde $1.25<span style="font-size: 15px; color: var(--cc-text-muted); font-weight: 500;"> / jugador</span></div>
+            <div style="font-size: 14px; color: var(--cc-text-muted); margin-top: 8px; max-width: 320px; line-height: 1.5;">Torneos puntuales por tramos. Sin suscripción; planillas y reportes incluidos.</div>
+          </div>
+          <a href="#planes" class="ghost-cta" style="display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 10px; background: #fff; color: var(--cc-azul-mesa); font-weight: 600; font-size: 14.5px; box-shadow: inset 0 0 0 1.5px var(--cc-blue-200); white-space: nowrap;">Calcular evento</a>
+        </div>
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 20px; background: var(--cc-gradient-deep); color: #fff; border-radius: 20px; padding: 28px; flex-wrap: wrap;">
+          <div>
+            <span style="display: inline-flex; font-size: 12px; font-weight: 700; color: var(--cc-azul-profundo); background: var(--cc-blanco-marfil); padding: 4px 11px; border-radius: 999px;">Federación / Asociación</span>
+            <div style="font-family: var(--cc-font-display); font-size: 30px; font-weight: 800; letter-spacing: -.03em; margin-top: 12px;">Cotización anual</div>
+            <div style="font-size: 14px; color: var(--cc-gris-tecnico); margin-top: 8px; max-width: 320px; line-height: 1.5;">Estándar oficial, ranking nacional, marca institucional y soporte prioritario.</div>
+          </div>
+          <a href="#agenda" class="blue400-cta" style="display: inline-flex; align-items: center; gap: 8px; height: 46px; padding: 0 20px; border-radius: 10px; background: var(--cc-primary); color: #fff; font-weight: 600; font-size: 14.5px; box-shadow: var(--cc-shadow-brand); white-space: nowrap;">Hablar con ventas</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SEGMENTOS ===================== -->
+  <section id="segmentos" style="padding: 96px 0; background: #fff;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px;">
+      <div style="max-width: 640px;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-azul-mesa);">Para quién</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 12px 0 0; line-height: 1.08;">Pensada para cada nivel del deporte</h2>
+      </div>
+      <div class="seg-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 46px;">
+        <div data-reveal class="card-hover" style="padding: 26px; border-radius: 16px; background: var(--cc-blanco-marfil); border: 1px solid #E6E7DA;">
+          <span style="display: inline-flex; padding: 12px; border-radius: 12px; background: #fff; color: var(--cc-azul-mesa); box-shadow: var(--cc-shadow-xs);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 18px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 16px;">Clubes y salas</div>
+          <div style="font-size: 14px; color: var(--cc-text-muted); line-height: 1.6; margin-top: 8px;">Más orden, menos trabajo manual y resultados profesionales.</div>
+        </div>
+        <div data-reveal class="card-hover" style="padding: 26px; border-radius: 16px; background: var(--cc-blanco-marfil); border: 1px solid #E6E7DA;">
+          <span style="display: inline-flex; padding: 12px; border-radius: 12px; background: #fff; color: var(--cc-azul-mesa); box-shadow: var(--cc-shadow-xs);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 18px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 16px;">Asociaciones</div>
+          <div style="font-size: 14px; color: var(--cc-text-muted); line-height: 1.6; margin-top: 8px;">Ranking, jugadores, grupos, partidas y reportes en una sola plataforma.</div>
+        </div>
+        <div data-reveal class="card-hover" style="padding: 26px; border-radius: 16px; background: var(--cc-blanco-marfil); border: 1px solid #E6E7DA;">
+          <span style="display: inline-flex; padding: 12px; border-radius: 12px; background: #fff; color: var(--cc-azul-mesa); box-shadow: var(--cc-shadow-xs);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" x2="4" y1="22" y2="15"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 18px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 16px;">Federaciones</div>
+          <div style="font-size: 14px; color: var(--cc-text-muted); line-height: 1.6; margin-top: 8px;">Estándar oficial e historial deportivo nacional.</div>
+        </div>
+        <div data-reveal class="card-hover" style="padding: 26px; border-radius: 16px; background: var(--cc-blanco-marfil); border: 1px solid #E6E7DA;">
+          <span style="display: inline-flex; padding: 12px; border-radius: 12px; background: #fff; color: var(--cc-azul-mesa); box-shadow: var(--cc-shadow-xs);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+          <div style="font-family: var(--cc-font-display); font-size: 18px; font-weight: 700; color: var(--cc-azul-profundo); margin-top: 16px;">Eventos grandes</div>
+          <div style="font-size: 14px; color: var(--cc-text-muted); line-height: 1.6; margin-top: 8px;">Planillas, llaves, reportes y cierre profesional en torneos puntuales.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== AGENDA (Google Calendar) ===================== -->
+  <section id="agenda" style="padding: 96px 0; background: var(--cc-blanco-marfil);">
+    <div style="max-width: 1100px; margin: 0 auto; padding: 0 32px;">
+      <div style="text-align: center; max-width: 640px; margin: 0 auto;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-azul-mesa);">Agenda</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 12px 0 0; line-height: 1.08;">Reserve una demo o reunión</h2>
+        <p style="font-size: 17px; color: var(--cc-text-muted); margin-top: 14px; line-height: 1.6;">Elija el horario que mejor le quede y conversemos sobre su campeonato.</p>
+      </div>
+      <div style="margin-top: 36px; background: #fff; border: 1px solid var(--cc-border); border-radius: 20px; box-shadow: var(--cc-shadow-lg); overflow: hidden;">
+        <!-- Google Calendar Appointment Scheduling begin -->
+        <iframe src="https://calendar.google.com/calendar/appointments/schedules/AcZssZ0j1JEU0u-aEUogRIRWE2vRLWzcIN4bBTokwtaIJ0BSdYbWyGLU41I0UMvEX-2zweuddh7feuyH?gv=true" title="Agendar cita CaromChamps" loading="lazy" style="border: 0; display: block;" width="100%" height="600" frameborder="0"></iframe>
+        <!-- end Google Calendar Appointment Scheduling -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MARCA / LOGO OFICIAL ===================== -->
+  <section style="padding: 72px 0; background: var(--cc-blanco-marfil); text-align: center;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px;">
+      <img src="assets/logo-full.png" alt="CaromChamps" style="height: 150px; width: auto; max-width: 100%;">
+      <div style="font-family: var(--cc-font-display); font-weight: 700; font-size: 16px; letter-spacing: .14em; text-transform: uppercase; color: var(--cc-azul-mesa); margin-top: 18px;">Precisión deportiva. Control digital.</div>
+    </div>
+  </section>
+
+  <!-- ===================== CTA ===================== -->
+  <section style="position: relative; overflow: hidden; padding: 100px 0; background: var(--cc-gradient-table); color: #fff; text-align: center;">
+    <svg viewBox="0 0 1200 420" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%; opacity: .18; pointer-events: none;">
+      <path d="M-40 320 C 260 180, 480 360, 760 200 S 1160 120, 1320 260" fill="none" stroke="#fff" stroke-width="2"></path>
+      <path d="M-40 120 C 280 220, 520 60, 800 180 S 1180 320, 1320 180" fill="none" stroke="#fff" stroke-width="1.4"></path>
+      <circle cx="980" cy="150" r="9" fill="#F5C116"></circle>
+      <circle cx="300" cy="270" r="8" fill="#F4F6EA"></circle>
+      <circle cx="640" cy="120" r="8" fill="#C80F1D"></circle>
+    </svg>
+    <div style="position: absolute; inset: 0; background: linear-gradient(135deg, rgba(26,67,168,.78), rgba(36,92,232,.62)); pointer-events: none;"></div>
+    <div style="position: relative; max-width: 1200px; margin: 0 auto; padding: 0 32px;">
+      <h2 style="font-family: var(--cc-font-display); font-size: 42px; font-weight: 800; letter-spacing: -.03em; margin: 0; line-height: 1.1;">La carambola organizada con precisión profesional</h2>
+      <p style="font-size: 18px; color: rgba(255,255,255,.88); margin-top: 16px;">Menos trabajo manual, mayor control, mejores datos y campeonatos más profesionales.</p>
+      <div style="display: flex; gap: 14px; justify-content: center; margin-top: 28px; flex-wrap: wrap;">
+        <a href="#agenda" class="cta-white" style="display: inline-flex; align-items: center; gap: 9px; height: 54px; padding: 0 28px; border-radius: 12px; background: #fff; color: var(--cc-azul-mesa); font-weight: 700; font-size: 16.5px; box-shadow: var(--cc-shadow-lg);">
+          Solicitar demo
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+        </a>
+        <a href="/caromchampsapp/" class="cta-out" style="display: inline-flex; align-items: center; height: 54px; padding: 0 26px; border-radius: 12px; background: transparent; color: #fff; font-weight: 600; font-size: 16.5px; box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.5);">Empezar gratis</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer style="background: var(--cc-azul-profundo); padding: 40px 0;">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+      <div style="display: flex; align-items: center; gap: 11px;">
+        <img src="assets/logo-full-white.png" alt="CaromChamps" style="height: 56px; width: auto;">
+      </div>
+      <span style="font-size: 13px; color: var(--cc-gris-tecnico);">Plataforma para campeonatos de carambola a 3 bandas.</span>
+      <span style="font-size: 12.5px; color: var(--cc-gris-tecnico);">© 2026 CaromChamps · Precisión deportiva. Control digital.</span>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  /* ---- Plans toggle (Mensual / Anual) ---- */
+  (function(){
+    var annual = true;
+    var btnM = document.getElementById('planMensual');
+    var btnA = document.getElementById('planAnual');
+    function setActive(btn, on){
+      btn.style.background = on ? '#fff' : 'transparent';
+      btn.style.color = on ? 'var(--cc-azul-mesa)' : 'var(--cc-text-muted)';
+      btn.style.boxShadow = on ? 'var(--cc-shadow-xs)' : 'none';
+    }
+    function apply(){
+      document.getElementById('clubPrice').textContent = annual ? '$200' : '$20';
+      document.getElementById('proPrice').textContent = annual ? '$500' : '$50';
+      var per = annual ? '/año' : '/mes';
+      Array.prototype.forEach.call(document.querySelectorAll('.perLabel'), function(e){ e.textContent = per; });
+      setActive(btnA, annual);
+      setActive(btnM, !annual);
+    }
+    btnM.addEventListener('click', function(){ annual = false; apply(); });
+    btnA.addEventListener('click', function(){ annual = true; apply(); });
+    apply();
+  })();
+
+  /* ---- Scroll-reveal + animated counters ---- */
+  (function(){
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return;
+    var reveals = document.querySelectorAll('[data-reveal]');
+    Array.prototype.forEach.call(reveals, function(el, i){
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(26px)';
+      el.style.transition = 'opacity .6s var(--cc-ease), transform .6s var(--cc-ease)';
+      el.style.transitionDelay = ((i % 4) * 70) + 'ms';
+    });
+    var ro = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (e.isIntersecting){ e.target.style.opacity = '1'; e.target.style.transform = 'translateY(0)'; ro.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    Array.prototype.forEach.call(reveals, function(el){ ro.observe(el); });
+
+    var counters = document.querySelectorAll('[data-count]');
+    var co = new IntersectionObserver(function(es){
+      es.forEach(function(e){
+        if (!e.isIntersecting) return;
+        var el = e.target; co.unobserve(el);
+        var target = parseFloat(el.getAttribute('data-count'));
+        var suffix = el.getAttribute('data-suffix') || '';
+        if (isNaN(target)) return;
+        var dur = 1300, start = performance.now();
+        function tick(now){
+          var p = Math.min(1, (now - start) / dur);
+          var eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(tick); else el.textContent = target + suffix;
+        }
+        requestAnimationFrame(tick);
+      });
+    }, { threshold: 0.5 });
+    Array.prototype.forEach.call(counters, function(el){ co.observe(el); });
+  })();
+</script>
+</body>
+</html>

@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CaromChamps · Demo interactiva de la plataforma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./ds-styles.css" />
+<link rel="icon" href="./assets/logo-mark.png" />
+<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+<script src="./_ds_bundle.js"></script>
+<style>
+  html, body { margin: 0; background: transparent; }
+  @keyframes cc-pulse { 0%,100% { opacity: .35; } 50% { opacity: 1; } }
+  @media (prefers-reduced-motion: reduce){ * { animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<!-- Working, self-contained product screens (override the bundle's standalone-broken CCScreens) -->
+<script src="./icons.js"></script>
+<script src="./AppShell.js"></script>
+<script src="./screens-core.js"></script>
+<script src="./screens-more.js"></script>
+<script src="./data.js"></script>
+<script>
+(function () {
+  var h = React.createElement;
+
+  var NAV = [
+    ["dashboard", "Dashboard", "layout-dashboard"],
+    ["inscripciones", "Inscripciones", "user-plus"],
+    ["grupos", "Grupos", "users"],
+    ["partidas", "Partidas", "clipboard-list"],
+    ["planillas", "Planillas IA", "scan-line"],
+    ["llaves", "Llaves", "git-merge"],
+    ["reportes", "Reportes", "file-text"],
+    ["cierre", "Cierre", "flag"],
+  ];
+  var TITLES = {
+    dashboard: "Dashboard",
+    inscripciones: "Inscripción de jugadores",
+    grupos: "Grupos y posiciones",
+    partidas: "Partidas",
+    planillas: "Planillas IA",
+    llaves: "Llaves eliminatorias",
+    reportes: "Reportes institucionales",
+    cierre: "Cierre del campeonato",
+  };
+
+  // Screens reference logos at "../../assets/..". Rewrite to local "assets/.."
+  function fixLogos(scope) {
+    (scope || document).querySelectorAll('img').forEach(function (img) {
+      var s = img.getAttribute('src');
+      if (s && s.indexOf('../../assets/') !== -1) {
+        img.setAttribute('src', s.replace(/(\.\.\/)+assets\//, 'assets/'));
+      }
+    });
+  }
+
+  function PlatformDemo() {
+    var have = function () { return !!(window.CCScreens && window.CCScreens.Dashboard && window.CCIcon); };
+    var rs = React.useState(have()); var ready = rs[0], setReady = rs[1];
+    var as = React.useState("dashboard"); var active = as[0], setActive = as[1];
+    var au = React.useState(true); var auto = au[0], setAuto = au[1];
+    var ps = React.useState(false); var paused = ps[0], setPaused = ps[1];
+
+    React.useEffect(function () {
+      if (ready) return;
+      var t = setInterval(function () { if (have()) { setReady(true); clearInterval(t); } }, 40);
+      return function () { clearInterval(t); };
+    }, [ready]);
+
+    React.useEffect(function () {
+      var mo = new MutationObserver(function () { fixLogos(document); });
+      mo.observe(document.body, { childList: true, subtree: true });
+      fixLogos(document);
+      return function () { mo.disconnect(); };
+    }, []);
+
+    // Auto-cycle through every module so visitors see each menu deploy itself.
+    React.useEffect(function () {
+      if (!ready || !auto || paused) return;
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduce) return;
+      var t = setInterval(function () {
+        setActive(function (cur) {
+          var ids = NAV.map(function (n) { return n[0]; });
+          var i = ids.indexOf(cur);
+          return ids[(i + 1) % ids.length];
+        });
+      }, 3200);
+      return function () { clearInterval(t); };
+    }, [ready, auto, paused]);
+
+    var frame = {
+      borderRadius: 18, overflow: "hidden", background: "var(--cc-surface-card)",
+      border: "1px solid var(--cc-border)",
+      boxShadow: "0 40px 90px rgba(5,8,25,.28), 0 8px 24px rgba(5,8,25,.12)",
+    };
+    var bar = {
+      display: "flex", alignItems: "center", gap: 8, padding: "13px 18px",
+      background: "var(--cc-azul-profundo)", borderBottom: "1px solid rgba(255,255,255,.08)",
+    };
+    var dot = function (c) { return { width: 11, height: 11, borderRadius: "50%", background: c }; };
+    var url = {
+      marginLeft: 14, display: "flex", alignItems: "center", gap: 8, flex: 1, height: 30,
+      padding: "0 14px", borderRadius: 999, background: "rgba(255,255,255,.07)", color: "#9FB0CE",
+      fontFamily: "var(--cc-font-ui)", fontSize: 12.5, letterSpacing: ".01em",
+    };
+
+    if (!ready) {
+      return h("div", { style: frame },
+        h("div", { style: bar },
+          h("span", { style: dot("#FF5F57") }), h("span", { style: dot("#FEBC2E") }), h("span", { style: dot("#28C840") }),
+          h("div", { style: url }, "app.caromchamps.com")
+        ),
+        h("div", { style: { height: 620, display: "flex", alignItems: "center", justifyContent: "center",
+          color: "var(--cc-text-muted)", fontFamily: "var(--cc-font-ui)", fontSize: 14, background: "var(--cc-surface-app)" } },
+          "Cargando plataforma…")
+      );
+    }
+
+    var S = window.CCScreens;
+    var Icon = window.CCIcon;
+    var map = {
+      dashboard: S.Dashboard, inscripciones: S.Inscripciones, grupos: S.Grupos,
+      partidas: S.Partidas, planillas: S.PlanillasIA, llaves: S.Llaves,
+      reportes: S.Reportes, cierre: S.Cierre,
+    };
+    var Screen = map[active] || S.Dashboard;
+
+    var tabStrip = {
+      display: "flex", gap: 4, padding: "10px 14px", overflowX: "auto",
+      background: "var(--cc-surface-card)", borderBottom: "1px solid var(--cc-border)",
+    };
+    var tabBtn = function (on) {
+      return {
+        display: "inline-flex", alignItems: "center", gap: 7, flex: "0 0 auto",
+        height: 36, padding: "0 14px", borderRadius: 999, border: "none", cursor: "pointer",
+        fontFamily: "var(--cc-font-ui)", fontSize: 13.5, fontWeight: 600, letterSpacing: "-.005em",
+        background: on ? "var(--cc-primary)" : "transparent",
+        color: on ? "#fff" : "var(--cc-text-muted)",
+        boxShadow: on ? "var(--cc-shadow-brand)" : "none",
+        transition: "background var(--cc-dur) var(--cc-ease), color var(--cc-dur) var(--cc-ease)",
+        whiteSpace: "nowrap",
+      };
+    };
+    var autoPill = {
+      display: "inline-flex", alignItems: "center", gap: 6, height: 26, padding: "0 11px",
+      borderRadius: 999, border: "none", cursor: "pointer", flex: "0 0 auto",
+      fontFamily: "var(--cc-font-ui)", fontSize: 11.5, fontWeight: 600,
+      background: auto ? "rgba(245,193,22,.16)" : "rgba(255,255,255,.08)",
+      color: auto ? "#F5C116" : "#9FB0CE",
+    };
+
+    return h("div", {
+      style: frame,
+      onMouseEnter: function () { setPaused(true); },
+      onMouseLeave: function () { setPaused(false); },
+    },
+      h("div", { style: bar },
+        h("span", { style: dot("#FF5F57") }), h("span", { style: dot("#FEBC2E") }), h("span", { style: dot("#28C840") }),
+        h("div", { style: url }, h(Icon, { name: "lock", size: 13 }), "app.caromchamps.com / " + active),
+        h("button", {
+          style: autoPill,
+          title: auto ? "Recorrido automático activo" : "Recorrido automático en pausa",
+          onClick: function () { setAuto(function (a) { return !a; }); },
+        },
+          h("span", { style: { width: 7, height: 7, borderRadius: "50%", background: auto ? "#F5C116" : "#64748B", animation: auto ? "cc-pulse 1.6s ease-in-out infinite" : "none" } }),
+          auto ? "Auto" : "Pausa"
+        )
+      ),
+      h("div", { style: tabStrip },
+        h("img", { src: "assets/logo-full.png", alt: "CaromChamps",
+          style: { height: 38, width: "auto", flex: "0 0 auto", marginLeft: 4, marginRight: 8, alignSelf: "center" } }),
+        h("span", { style: { width: 1, alignSelf: "stretch", margin: "4px 8px 4px 2px", background: "var(--cc-border)", flex: "0 0 auto" } }),
+        NAV.map(function (n) {
+          var id = n[0], label = n[1], ic = n[2];
+          return h("button", {
+            key: id, style: tabBtn(active === id),
+            onMouseEnter: function (e) { if (active !== id) e.currentTarget.style.background = "var(--cc-blue-50)"; },
+            onMouseLeave: function (e) { if (active !== id) e.currentTarget.style.background = "transparent"; },
+            onClick: function () { setActive(id); setAuto(false); },
+          }, h(Icon, { name: ic, size: 16 }), label);
+        })
+      ),
+      h("div", { style: { height: 600, overflow: "auto", background: "var(--cc-surface-app)", padding: "24px 26px" } },
+        h("div", { style: { display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, marginBottom: 18 } },
+          h("div", { style: { fontFamily: "var(--cc-font-display)", fontSize: 22, fontWeight: 700, color: "var(--cc-azul-profundo)", letterSpacing: "-.02em" } }, TITLES[active]),
+          (active === "dashboard" || active === "inscripciones" || active === "llaves")
+            ? h("img", { src: "assets/logo-full.png", alt: "CaromChamps", style: { height: 61, width: "auto", flex: "0 0 auto", opacity: .96 } })
+            : null
+        ),
+        h(Screen)
+      )
+    );
+  }
+
+  function mount() {
+    if (!(window.CCScreens && window.CCScreens.Dashboard && window.CCIcon)) return setTimeout(mount, 40);
+    ReactDOM.createRoot(document.getElementById("root")).render(h(PlatformDemo));
+  }
+  mount();
+})();
+</script>
+</body>
+</html>

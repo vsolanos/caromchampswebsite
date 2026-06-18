@@ -1,0 +1,108 @@
+/* ===========================================================================
+   CaromChamps — Color Tokens
+   Palette derived from the carom table (blue) and the three carom balls
+   (white, yellow, red). Blue dominates (~65%); white/ivory ~20%;
+   yellow ~8%; red ~5%; deep blue ~2%.
+   =========================================================================== */
+
+:root {
+  /* ---- Brand base palette (Libro de Marca) ---- */
+  --cc-azul-mesa: #245CE8;        /* primary brand, CTAs, active nav, product accents */
+  --cc-azul-profundo: #050819;    /* premium bg, headers, dark mode, high-contrast text */
+  --cc-rojo-carambola: #C80F1D;   /* energy accents, critical alerts, close/risk actions */
+  --cc-blanco-marfil: #F4F6EA;    /* clean bg, special cards, visual rest */
+  --cc-amarillo-carambola: #F5C116;/* highlights, relevant states, featured metrics */
+  --cc-gris-tecnico: #B3B0AE;     /* borders, dividers, table backgrounds, neutrals */
+
+  /* ---- Functional interface colors ---- */
+  --cc-celeste-ui: #DDF7FF;       /* soft active-section bg, forms, nav, panels */
+  --cc-verde-exito: #157A3A;      /* success: saved, match finished, validated, closed */
+  --cc-naranja-accion: #C45A00;   /* reopen, intermediate operational warnings */
+  --cc-fondo-app: #F7FAFC;        /* general platform background */
+  --cc-texto-principal: #111827;  /* titles, critical data, tables */
+  --cc-texto-secundario: #64748B; /* helper text, labels, subtitles, metadata */
+
+  /* ---- Primary blue scale (built around Azul Mesa) ---- */
+  --cc-blue-50:  #EEF3FE;
+  --cc-blue-100: #DBE6FD;
+  --cc-blue-200: #B8CDFB;
+  --cc-blue-300: #8AAAF6;
+  --cc-blue-400: #5380F0;
+  --cc-blue-500: #245CE8;   /* = Azul Mesa */
+  --cc-blue-600: #1D4FCB;
+  --cc-blue-700: #1A43A8;
+  --cc-blue-800: #1A3A85;
+  --cc-blue-900: #1B3469;
+  --cc-blue-950: #050819;   /* = Azul Profundo */
+
+  /* ---- Neutral / gray scale ---- */
+  --cc-gray-50:  #F7FAFC;
+  --cc-gray-100: #EEF2F6;
+  --cc-gray-200: #E5E9F0;
+  --cc-gray-300: #D5D9DE;
+  --cc-gray-400: #B3B0AE;   /* = Gris Técnico */
+  --cc-gray-500: #94A3B8;
+  --cc-gray-600: #64748B;   /* = Texto Secundario */
+  --cc-gray-700: #475569;
+  --cc-gray-800: #1E293B;
+  --cc-gray-900: #111827;   /* = Texto Principal */
+
+  /* ---- Soft state backgrounds (for badges, banners, rows) ---- */
+  --cc-success-soft: #E3F2E9;
+  --cc-warning-soft: #FEF4D6;
+  --cc-action-soft:  #FBEADD;
+  --cc-danger-soft:  #FBE3E5;
+  --cc-active-soft:  #E8EFFE;
+  --cc-pending-soft: #EFEEED;
+
+  /* =========================================================================
+     SEMANTIC ALIASES — reference these in components, not the raw values.
+     ========================================================================= */
+
+  /* Surfaces */
+  --cc-surface-app: var(--cc-fondo-app);
+  --cc-surface-card: #FFFFFF;
+  --cc-surface-card-special: var(--cc-blanco-marfil);
+  --cc-surface-active: var(--cc-celeste-ui);
+  --cc-surface-sunken: var(--cc-gray-100);
+  --cc-surface-dark: var(--cc-azul-profundo);
+  --cc-surface-table-head: var(--cc-gray-100);
+  --cc-surface-row-alt: var(--cc-gray-50);
+
+  /* Text */
+  --cc-text: var(--cc-texto-principal);
+  --cc-text-muted: var(--cc-texto-secundario);
+  --cc-text-brand: var(--cc-azul-mesa);
+  --cc-text-on-dark: var(--cc-blanco-marfil);
+  --cc-text-on-brand: #FFFFFF;
+
+  /* Brand / primary action */
+  --cc-primary: var(--cc-azul-mesa);
+  --cc-primary-hover: var(--cc-blue-600);
+  --cc-primary-active: var(--cc-blue-700);
+  --cc-primary-soft: var(--cc-blue-50);
+  --cc-on-primary: #FFFFFF;
+
+  /* Borders & dividers */
+  --cc-border: var(--cc-gray-200);
+  --cc-border-strong: var(--cc-gray-300);
+  --cc-border-accent: #B6E8F7;            /* celeste card border */
+  --cc-divider: var(--cc-gray-200);
+  --cc-focus-ring: rgba(36, 92, 232, 0.35);
+
+  /* Functional states (carry both fg color + soft bg) */
+  --cc-state-active: var(--cc-azul-mesa);          /* En curso */
+  --cc-state-active-bg: var(--cc-active-soft);
+  --cc-state-success: var(--cc-verde-exito);       /* Finalizada */
+  --cc-state-success-bg: var(--cc-success-soft);
+  --cc-state-warning: #9A6B00;                     /* Revisión (readable text on soft yellow) */
+  --cc-state-warning-bg: var(--cc-warning-soft);
+  --cc-state-warning-solid: var(--cc-amarillo-carambola);
+  --cc-state-action: var(--cc-naranja-accion);     /* Reabrir */
+  --cc-state-action-bg: var(--cc-action-soft);
+  --cc-state-danger: var(--cc-rojo-carambola);     /* Error / crítica */
+  --cc-state-danger-bg: var(--cc-danger-soft);
+  --cc-state-pending: var(--cc-gris-tecnico);      /* Pendiente */
+  --cc-state-pending-bg: var(--cc-pending-soft);
+  --cc-state-pending-text: var(--cc-gray-600);
+}

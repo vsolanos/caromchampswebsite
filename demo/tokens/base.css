@@ -1,0 +1,42 @@
+/* ===========================================================================
+   CaromChamps — Base element defaults
+   Light, opt-in foundation: sets the brand's typographic baseline and a few
+   ergonomic resets. Components reference tokens directly, so this stays minimal.
+   =========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--cc-font-ui);
+  font-size: var(--cc-text-body);
+  line-height: var(--cc-leading-normal);
+  color: var(--cc-text);
+  background: var(--cc-surface-app);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--cc-font-display);
+  color: var(--cc-text);
+  margin: 0;
+  line-height: var(--cc-leading-tight);
+  letter-spacing: var(--cc-tracking-tight);
+}
+
+/* Tabular figures everywhere numbers matter most */
+.cc-nums,
+[data-nums] {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: var(--cc-nums-tabular);
+}
+
+::selection {
+  background: var(--cc-blue-200);
+  color: var(--cc-azul-profundo);
+}

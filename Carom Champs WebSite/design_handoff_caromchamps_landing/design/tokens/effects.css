@@ -1,0 +1,47 @@
+/* ===========================================================================
+   CaromChamps — Effects: radii, shadows, borders, transitions
+   SaaS cards: rounded containers, soft shadows, light celeste borders.
+   No heavy shadows or excessive effects — clarity over decoration.
+   =========================================================================== */
+
+:root {
+  /* ---- Corner radii ---- */
+  --cc-radius-xs: 4px;
+  --cc-radius-sm: 6px;
+  --cc-radius-md: 10px;    /* default for inputs, buttons, small cards */
+  --cc-radius-lg: 14px;    /* cards, panels */
+  --cc-radius-xl: 20px;    /* hero cards, modals */
+  --cc-radius-2xl: 28px;
+  --cc-radius-pill: 999px;
+
+  /* ---- Shadows (soft, low-spread) ---- */
+  --cc-shadow-xs: 0 1px 2px rgba(5, 8, 25, 0.05);
+  --cc-shadow-sm: 0 1px 3px rgba(5, 8, 25, 0.06), 0 1px 2px rgba(5, 8, 25, 0.04);
+  --cc-shadow-md: 0 4px 12px rgba(5, 8, 25, 0.08), 0 1px 3px rgba(5, 8, 25, 0.05);
+  --cc-shadow-lg: 0 12px 28px rgba(5, 8, 25, 0.10), 0 2px 6px rgba(5, 8, 25, 0.06);
+  --cc-shadow-xl: 0 24px 56px rgba(5, 8, 25, 0.14);
+  /* brand-tinted lift for primary cards / hovered CTAs */
+  --cc-shadow-brand: 0 10px 24px rgba(36, 92, 232, 0.22);
+  --cc-shadow-focus: 0 0 0 3px var(--cc-focus-ring);
+
+  /* ---- Border widths ---- */
+  --cc-border-width: 1px;
+  --cc-border-width-strong: 2px;
+
+  /* ---- Transitions ---- */
+  --cc-ease: cubic-bezier(0.22, 0.61, 0.36, 1); /* @kind other */
+  --cc-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1); /* @kind other */
+  --cc-dur-fast: 120ms; /* @kind other */
+  --cc-dur: 180ms; /* @kind other */
+  --cc-dur-slow: 280ms; /* @kind other */
+  --cc-transition: all var(--cc-dur) var(--cc-ease);
+
+  /* ---- Blur (glass panels over imagery — used sparingly) ---- */
+  --cc-blur: 12px;
+
+  /* ---- Signature gradients (marketing / dark hero only) ---- */
+  --cc-gradient-table: linear-gradient(135deg, #1A43A8 0%, #245CE8 55%, #5380F0 100%); /* @kind color */
+  --cc-gradient-deep: linear-gradient(160deg, #0B1538 0%, #050819 100%); /* @kind color */
+  /* data-viz accent: blue → yellow per brand chart guidance */
+  --cc-gradient-data: linear-gradient(90deg, #245CE8 0%, #F5C116 100%); /* @kind color */
+}

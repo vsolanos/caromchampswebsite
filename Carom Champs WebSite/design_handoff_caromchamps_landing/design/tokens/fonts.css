@@ -1,0 +1,8 @@
+/* ===========================================================================
+   CaromChamps — Webfonts
+   Recommended families (Libro de Marca §8): Montserrat / Sora for display,
+   Inter for UI & data. All are loaded from Google Fonts.
+   NOTE: the logo wordmark is custom art — never reproduced with these webfonts.
+   =========================================================================== */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@600;700;800&family=Sora:wght@600;700;800&display=swap");
