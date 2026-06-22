@@ -1,0 +1,54 @@
+name: Website CI
+
+# Valida el build del website y mantiene el README al dia automaticamente.
+# En push a main que toque landing/ o demo/, regenera el bloque AUTO:ESTADO del
+# README (npm run build -> prebuild -> scripts/update-readme.js) y, si cambio,
+# lo commitea de vuelta.
+#
+# Guard anti-loop: el auto-commit solo modifica README.md, que NO esta en los
+# paths que disparan el workflow; ademas usa [skip ci]. Asi no se re-dispara.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'landing/**'
+      - 'demo/**'
+      - 'scripts/**'
+      - 'package.json'
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-stamp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # historial completo: update-readme usa `git log -- landing demo`
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # build-website.js y update-readme.js solo usan modulos nativos de Node;
+      # no hay dependencias que instalar.
+      - name: Build del website (prebuild sella el README)
+        run: npm run build
+
+      - name: Commitear README si cambio (solo push a main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          if [ -n "$(git status --porcelain README.md)" ]; then
+            git config user.name  "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add README.md
+            git commit -m "docs(readme): auto-stamp AUTO:ESTADO [skip ci]"
+            git push
+            echo "README actualizado y commiteado."
+          else
+            echo "README ya estaba al dia; nada que commitear."
+          fi
