@@ -4,6 +4,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "node scripts/build-website.js"
+    "prebuild": "node scripts/update-readme.js",
+    "build": "node scripts/build-website.js",
+    "readme:stamp": "node scripts/update-readme.js"
   }
 }
