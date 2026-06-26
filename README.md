@@ -36,7 +36,7 @@ rendimiento · Torneo de ranking · Mis juegos / My Games · Planillas IA · Mes
 Planes · Segmentos (5) · Marca · CTA · Footer.
 
 <!-- AUTO:ESTADO -->
-_Ultima actualizacion del contenido: 2026-06-21 · commit `490b416` — feat(landing): seccion Mis juegos, franja Jugador Pro y segmento Jugadores (handoff V2)_
+_Ultima actualizacion del contenido: 2026-06-25 · commit `ab14a22` — feat(landing): seccion Arquitectura/Formatos con infografico competitivo (V3) + nav_
 <!-- /AUTO:ESTADO -->
 
 > El bloque "Ultima actualizacion del contenido" se regenera **automaticamente** en
