@@ -35,13 +35,14 @@ Fondo general blanco; ssecciones alternan blanco / marfil (`#F4F6EA`) / azul osc
 2. **Hero** — fondo azul degradado, animado
 3. **Stat band** — 4 métricas con contadores animados
 4. **Plataforma (demo interactiva en vivo)** — fondo azul oscuro
-5. **Funciones** — grid de 10 tarjetas
+5. **Funciones** — grid de 11 tarjetas
 6. **Historial y rendimiento** — dashboard brandeado de jugador
 7. **Torneo de ranking** — fondo azul, tabla acumulada
+7b. **Mis juegos / My Games** — módulo personal del jugador (fondo blanco)
 8. **Planillas IA / OCR** — spotlight con animación de escaneo
 9. **Mesas de competición** — imagen + texto
 10. **Planes** — 3 tarjetas + toggle mensual/anual + 2 bloques (On Demand / Federación)
-11. **Segmentos** — grid de 4 tarjetas
+11. **Segmentos** — grid de 5 tarjetas (incluye Jugadores)
 12. **Franja de marca** — logo oficial centrado (antepenúltima)
 13. **CTA final** — fondo azul degradado con imagen de fondo
 14. **Footer** — azul oscuro
@@ -133,12 +134,12 @@ Fondo general blanco; ssecciones alternan blanco / marfil (`#F4F6EA`) / azul osc
 
 ### 5. Funciones
 - **Layout:** fondo blanco, padding `96px 0`. Encabezado (overline "Funciones", H2, párrafo). Grid
-  **`repeat(auto-fit, minmax(250px, 1fr))`**, gap 22px. **10 tarjetas.**
+  **`repeat(auto-fit, minmax(250px, 1fr))`**, gap 22px. **11 tarjetas.**
 - **Cada tarjeta:** bg blanco, borde `--cc-border`, radius 16px, padding 28px, `--cc-shadow-xs`;
   hover → `--cc-shadow-md` + `translateY(-4px)`. Icono Lucide en cuadro `--cc-blue-50` (color `--cc-azul-mesa`,
   padding 13px, radius 13px) + título (Montserrat 19px, weight 700, `--cc-azul-profundo`) + descripción
   (14.5px, `--cc-text-muted`, line-height 1.62). Aparecen con **scroll-reveal** (fade + slide-up, stagger).
-- **Las 10 funciones (título — descripción):**
+- **Las 11 funciones (título — descripción):**
   1. Especialización real — Diseñada para la lógica competitiva de la carambola a 3 bandas, no un generador genérico de llaves.
   2. Operación completa — Inscripción, grupos, calendario, partidas, llaves, reportes y cierre — todo el ciclo del campeonato.
   3. Planillas oficiales con QR — Planillas con estructura deportiva real, códigos y QR para control y trazabilidad.
@@ -148,8 +149,9 @@ Fondo general blanco; ssecciones alternan blanco / marfil (`#F4F6EA`) / azul osc
   7. Múltiples formatos de campeonato — Eliminación simple, fase de grupos + eliminación simple, doble fase de grupos y control por sets.
   8. Conformación flexible de grupos — Sorteo aleatorio (random), por cabezas de grupo y esquemas tipo snake para un balance justo.
   9. Reportería institucional — Reporte 5, acta final y documentación oficial lista para clubes, asociaciones y federaciones.
-  10. Dashboard multi-campeonato — Tablero ejecutivo con KPIs y control de todos los campeonatos activos a la vez.
-- Iconos Lucide usados: target, layers, scan-line, sparkles, line-chart, trophy, git-merge/brackets, shuffle, file-text, grid.
+  10. Dashboard multi-campeonato — Tablero ejecutivo con indicadores de rendimiento y control de todos los campeonatos activos a la vez.
+  11. Mis juegos / My Games — Historial personal del jugador, registro de partidas externas, análisis de rendimiento y modo juego entre usuarios con opción de compartir en redes.
+- Iconos Lucide usados: target, layers, scan-line, sparkles, line-chart, trophy, git-merge/brackets, shuffle, file-text, grid, gamepad.
 
 ### 6. Historial y rendimiento (id `#rendimiento`)
 - **Layout:** fondo `--cc-blanco-marfil`, padding `96px 0`. Encabezado + un **dashboard brandeado** (card
@@ -181,6 +183,21 @@ Fondo general blanco; ssecciones alternan blanco / marfil (`#F4F6EA`) / azul osc
   Filas: Óscar Barquero 365, Daniel Acosta 347, Greivin López 332, Marvin Chacón 313, Pablo Beltrán 295.
   Pie: "Óscar Barquero lidera el ranking general · campeón provisional".
 
+### 7b. Mis juegos / My Games (id `#misjuegos`)
+- **Propósito:** el módulo personal del jugador (plan Jugador). Fondo blanco, padding `96px 0`. Grid 2 col
+  `1.02fr / .98fr`, gap 56px.
+- **Izquierda:** badge "Mis juegos / My Games" (icono gamepad). H2 "El espacio personal de cada jugador".
+  Párrafo. 5 checks verdes: registro manual de partidas externas / modo juego entre usuarios con detalle de
+  tipos de carambola y efectividad / análisis de evolución del AVG e historial / compartir resultados con otros
+  jugadores y en redes sociales / **actualización automática de partidas entre instancias CaromChamps (ver
+  historial de otros clubes, salas, asociaciones o federaciones)**. Dos pills: "Starter · historial 6 meses +
+  inscripción directa" y "Jugador Pro · historial ilimitado + redes · $50/año".
+- **Derecha (mock del módulo, card oscura `linear-gradient(155deg,#14223F,#0A1424)`):** cabecera VS con jugador
+  "Víctor Solano" (JUG-0006 · ASOBIGRIE · CR); **franja de sincronización entre instancias** ("Sincronizado con
+  ASOBIGRIE, FECOBI y 2 salas"); fila de 4 indicadores (Mis partidas 5, Finalizadas 5, Victorias 3, Promedio
+  0.938); mini-gráfico SVG de evolución del promedio; pie con "Compartir rendimiento" + "Agregar historial manual".
+- *Nota:* el mock es ilustrativo — en producción consume el módulo real del app.
+
 ### 8. Planillas IA / OCR (spotlight)
 - **Layout:** fondo `--cc-surface-app`, padding `96px 0`. Grid 2 col, gap 56px.
 - **Izquierda:** badge "Planillas IA / OCR" (icono sparkles), H2 "Digitalice la planilla oficial en segundos",
@@ -211,11 +228,15 @@ Fondo general blanco; ssecciones alternan blanco / marfil (`#F4F6EA`) / azul osc
     outline "Calcular evento".
   - **Federación / Asociación:** card azul oscuro (`--cc-gradient-deep`), "Cotización anual", botón primario
     "Hablar con ventas".
+- **Franja Jugador Pro** (debajo de los 2 bloques): banda con degradado `linear-gradient(135deg,#1A43A8,#245CE8)`,
+  icono gamepad, título "Jugador Pro" + badge "Para jugadores", descripción (Mis juegos / My Games con historial
+  ilimitado y compartir en redes; Starter incluye 6 meses + inscripción directa), precio **$50 /año** y botón
+  blanco "Activar Jugador Pro".
 
 ### 11. Segmentos (id `#segmentos`)
-- **Layout:** fondo blanco, padding `96px 0`. Encabezado + grid 4 col, gap 20px. Tarjetas bg `--cc-blanco-marfil`,
-  borde `#E6E7DA`, radius 16px; hover translateY(-4px) + shadow. Icono en cuadro blanco.
-  - Clubes y salas / Asociaciones / Federaciones / Eventos grandes (icono + título + descripción).
+- **Layout:** fondo blanco, padding `96px 0`. Encabezado + grid `repeat(auto-fit, minmax(210px,1fr))`, gap 20px.
+  Tarjetas bg `--cc-blanco-marfil`, borde `#E6E7DA`, radius 16px; hover translateY(-4px) + shadow. Icono en cuadro blanco.
+  - Clubes y salas / Asociaciones / Federaciones / Eventos grandes / **Jugadores** (icono + título + descripción).
 
 ### 12. Franja de marca (antepenúltima)
 - **Layout:** fondo `--cc-blanco-marfil`, padding `72px 0`, centrado. **Logo oficial a color**
@@ -317,3 +338,22 @@ El `.dc.html` usa un runtime propietario y no se abre como HTML plano. Para **ve
 a quien te pasó este paquete una **exportación HTML autónoma** (un solo archivo) o un PDF/― o trabaja desde la
 documentación de este README, que es autosuficiente. El marcado y los estilos inline dentro del `.dc.html` son
 legibles directamente como referencia de implementación.
+
+---
+
+## Actualizaciones recientes (Copa Mundo, Formatos y Solicitar demo)
+
+- **Sección "Arquitectura competitiva" (`#arquitectura`, label de nav "Formatos").** Muestra la infografía de
+  formatos de campeonato, métodos de conformación de grupos, rondas preliminares (Ronda 0) y **Copa Mundo**.
+  En el prototipo se incrusta el DC `Infografia Arquitectura Competitiva.dc.html` (incluido en `design/`),
+  escalado responsivamente al ancho. En producción, recrea esa infografía como sección responsiva nativa
+  (o expórtala a imagen) — su contenido y estilos están en ese archivo.
+- **Copa Mundo CaromChamps** — formato insignia añadido como 12.ª función ("Copa Mundo CaromChamps") y al
+  texto de "Múltiples formatos de campeonato". Flujo: clasificatorias configurables PrePreQualy → PreQualy →
+  Qualy → Cuadro Principal (48 jugadores) → KO 32 (eliminación simple desde 32). Grupos de 3-4, clasifican por
+  puntaje y promedio, 16 grupos de 4, clasifican 2 por grupo, sembrados directos + clasificados del Qualy.
+- **Sección "Solicitar demo" (`#demo`).** Agendamiento embebido con un **iframe de Google Calendar
+  Appointment Scheduling** (`https://calendar.google.com/calendar/appointments/schedules/…?gv=true`,
+  width 100% / height 600). **Todos los botones "Solicitar demo"** (nav, hero y CTA final) apuntan a `#demo`
+  (`href="#demo"`); "Empezar gratis" y los CTA de planes siguen apuntando a `#planes`. En la implementación
+  real, sustituye el iframe por el widget de agendamiento del cliente o intégralo con tu sistema de reservas.
