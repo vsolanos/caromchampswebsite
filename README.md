@@ -36,7 +36,7 @@ rendimiento · Torneo de ranking · Mis juegos / My Games · Planillas IA · Mes
 Planes · Segmentos (5) · Marca · CTA · Footer.
 
 <!-- AUTO:ESTADO -->
-_Ultima actualizacion del contenido: 2026-06-25 · commit `ab14a22` — feat(landing): seccion Arquitectura/Formatos con infografico competitivo (V3) + nav_
+_Ultima actualizacion del contenido: 2026-06-26 · commit `13ccda1` — fix(landing): planes por defecto en tarifa mensual ($20/$50 /mes); Anual queda opcional_
 <!-- /AUTO:ESTADO -->
 
 > El bloque "Ultima actualizacion del contenido" se regenera **automaticamente** en
