@@ -85,10 +85,12 @@
       <a href="#top" style="display: flex; align-items: center; gap: 11px;">
         <img src="assets/logo-full-trim.png" alt="CaromChamps" style="height: 74px; width: auto;">
       </a>
-      <div class="nav-links" style="display: flex; gap: 30px;">
+      <div class="nav-links" style="display: flex; gap: 20px;">
         <a href="#producto" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Producto</a>
         <a href="#rendimiento" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Rendimiento</a>
+        <a href="#misjuegos" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Mis juegos</a>
         <a href="#funciones" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Funciones</a>
+        <a href="#arquitectura" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Formatos</a>
         <a href="#planes" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Planes</a>
         <a href="#segmentos" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Segmentos</a>
         <a href="#agenda" class="nl" style="font-size: 14.5px; font-weight: 500; color: var(--cc-text-muted);">Agenda</a>
@@ -784,6 +786,22 @@
     </div>
   </section>
 
+  <!-- ===================== ARQUITECTURA (FORMATOS) ===================== -->
+  <section id="arquitectura" style="padding: 96px 0; background: var(--cc-surface-app);">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 32px;">
+      <div style="max-width: 780px; margin: 0 auto; text-align: center;">
+        <span style="font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cc-azul-mesa);">Arquitectura competitiva</span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.028em; color: var(--cc-azul-profundo); margin: 12px 0 0; line-height: 1.08;">Toda la lógica competitiva, configurable</h2>
+        <p style="font-size: 17px; color: var(--cc-text-muted); margin-top: 14px; line-height: 1.6;">Formatos de campeonato, métodos de conformación de grupos, rondas preliminares y la Copa Mundo CaromChamps — la flexibilidad que absorbe la complejidad organizativa.</p>
+      </div>
+      <div style="margin-top: 40px; border-radius: 18px; overflow: hidden; box-shadow: var(--cc-shadow-lg); border: 1px solid var(--cc-border); background: #fff;">
+        <div class="cc-info-scale-outer" style="width: 100%; overflow: hidden; position: relative;">
+          <iframe class="cc-info-frame" src="infografia-arquitectura.html" title="Arquitectura competitiva de CaromChamps" loading="lazy" scrolling="no" style="width: 1600px; height: 2440px; border: 0; display: block; transform-origin: top left;"></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ===================== AGENDA (Google Calendar) ===================== -->
   <section id="agenda" style="padding: 96px 0; background: var(--cc-blanco-marfil);">
     <div style="max-width: 1100px; margin: 0 auto; padding: 0 32px;">
@@ -905,6 +923,25 @@
       });
     }, { threshold: 0.5 });
     Array.prototype.forEach.call(counters, function(el){ co.observe(el); });
+  })();
+
+  /* ---- Escalado responsivo del infografico de Arquitectura (diseñado a 1600px) ---- */
+  (function(){
+    var outer = document.querySelector('.cc-info-scale-outer');
+    var frame = document.querySelector('.cc-info-frame');
+    if (!outer || !frame) return;
+    function scale(){
+      var s = outer.clientWidth / 1600;
+      var h = 2440;
+      try { var d = frame.contentDocument; if (d && d.body) h = Math.max(d.body.scrollHeight, d.documentElement.scrollHeight); } catch (e) {}
+      frame.style.height = h + 'px';
+      frame.style.transform = 'scale(' + s + ')';
+      outer.style.height = (h * s) + 'px';
+    }
+    frame.addEventListener('load', function(){ scale(); setTimeout(scale, 400); });
+    window.addEventListener('resize', scale);
+    [300, 900, 1800].forEach(function(t){ setTimeout(scale, t); });
+    scale();
   })();
 </script>
 </body>
