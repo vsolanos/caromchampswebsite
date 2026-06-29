@@ -70,6 +70,7 @@
   }
   @media (max-width: 600px){
     .seg-grid,.stat-grid{grid-template-columns:1fr!important;}
+    .smart-card-grid,.smart-video-grid{grid-template-columns:1fr!important;}
     .kpi-grid{grid-template-columns:1fr 1fr 1fr!important;}
     .hero-h1{font-size:38px!important;}
   }
@@ -591,6 +592,93 @@
         <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 14px 22px; background: rgba(255,255,255,.04); border-top: 1px solid rgba(255,255,255,.07);">
           <span style="display: inline-flex; align-items: center; gap: 8px; font-size: 12px; color: #9FB0CE;"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--cc-amarillo-carambola)" stroke-width="2"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"></line><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"></line></svg>Compartir rendimiento</span>
           <span style="font-size: 11.5px; font-weight: 700; color: var(--cc-blue-300); background: rgba(36,92,232,.16); padding: 5px 11px; border-radius: 999px;">Agregar historial manual</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== SMART ANALYTICS ===================== -->
+  <section id="smartanalytics" style="padding: 96px 0; background: linear-gradient(160deg, #071126 0%, #0B1538 58%, #050819 100%); color: #fff; overflow: hidden;">
+    <div class="ia-grid" style="max-width: 1200px; margin: 0 auto; padding: 0 32px; display: grid; grid-template-columns: .98fr 1.02fr; gap: 56px; align-items: center;">
+      <div>
+        <span style="display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--cc-amarillo-carambola); background: rgba(245,193,22,.12); padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(245,193,22,.28);">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21 16-4 4-4-4"></path><path d="M17 20V4"></path><path d="m3 8 4-4 4 4"></path><path d="M7 4v16"></path></svg>
+          Smart Analytics | En validacion
+        </span>
+        <h2 style="font-family: var(--cc-font-display); font-size: 38px; font-weight: 800; letter-spacing: -.03em; color: #FFFFFF; margin: 18px 0 0; line-height: 1.08;">Del video al rendimiento deportivo</h2>
+        <p style="font-size: 17px; color: #C9D7F2; margin-top: 14px; line-height: 1.62;">CaromChamps prepara una nueva linea de analitica inteligente para transformar videos compatibles en metricas, comparativos y reportes accionables para jugadores, clubes, torneos y federaciones.</p>
+        <div class="smart-card-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 26px;">
+          <div style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 15px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--cc-amarillo-carambola); text-transform: uppercase; letter-spacing: .05em;">Computer Vision</div>
+            <div style="font-size: 13px; color: #DCE6FA; line-height: 1.45; margin-top: 8px;">Trayectorias, homografia y eventos deportivos medibles.</div>
+          </div>
+          <div style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 15px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--cc-amarillo-carambola); text-transform: uppercase; letter-spacing: .05em;">Ground truth</div>
+            <div style="font-size: 13px; color: #DCE6FA; line-height: 1.45; margin-top: 8px;">Jugar y Mis juegos como referencia manual de carambolas y entradas.</div>
+          </div>
+          <div style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 15px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--cc-amarillo-carambola); text-transform: uppercase; letter-spacing: .05em;">Tier 1 MVP</div>
+            <div style="font-size: 13px; color: #DCE6FA; line-height: 1.45; margin-top: 8px;">Entradas, tiros, carambolas logradas/falladas y AVG.</div>
+          </div>
+          <div style="background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 15px;">
+            <div style="font-size: 12px; font-weight: 800; color: var(--cc-amarillo-carambola); text-transform: uppercase; letter-spacing: .05em;">R2 + QA</div>
+            <div style="font-size: 13px; color: #DCE6FA; line-height: 1.45; margin-top: 8px;">Video privado, control de calidad y revision humana cuando aplique.</div>
+          </div>
+        </div>
+        <div style="margin-top: 24px; display: flex; flex-wrap: wrap; gap: 10px;">
+          <span style="font-size: 12px; font-weight: 700; color: #FFFFFF; border: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.07); padding: 8px 12px; border-radius: 999px;">Spike Fase 0.5 antes de precio/SLA</span>
+          <span style="font-size: 12px; font-weight: 700; color: var(--cc-azul-profundo); background: var(--cc-amarillo-carambola); padding: 8px 12px; border-radius: 999px;">Camara fija | 1080p | 30fps</span>
+        </div>
+      </div>
+
+      <div style="position: relative;">
+        <div style="position: absolute; inset: -20px; background: radial-gradient(circle at 70% 15%, rgba(36,92,232,.36), transparent 42%); pointer-events: none;"></div>
+        <div style="position: relative; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.12); border-radius: 18px; box-shadow: 0 34px 80px rgba(0,0,0,.38); overflow: hidden;">
+          <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 18px; border-bottom: 1px solid rgba(255,255,255,.09);">
+            <div>
+              <div style="font-size: 11px; font-weight: 800; color: var(--cc-amarillo-carambola); letter-spacing: .10em; text-transform: uppercase;">Analisis de video</div>
+              <div style="font-family: var(--cc-font-display); font-size: 20px; font-weight: 800; color: #fff; margin-top: 3px;">Entrenamiento | Jugador Pro</div>
+            </div>
+            <span style="font-size: 11px; font-weight: 800; color: #9EC5FF; background: rgba(36,92,232,.18); border: 1px solid rgba(36,92,232,.28); padding: 6px 10px; border-radius: 999px;">BETA ROADMAP</span>
+          </div>
+          <div class="smart-video-grid" style="display: grid; grid-template-columns: 1.45fr .9fr; gap: 0;">
+            <div style="padding: 18px; border-right: 1px solid rgba(255,255,255,.09);">
+              <svg viewBox="0 0 520 330" style="width: 100%; height: auto; display: block;">
+                <defs>
+                  <linearGradient id="smartTable" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="#1D4FCB"></stop>
+                    <stop offset="1" stop-color="#071126"></stop>
+                  </linearGradient>
+                </defs>
+                <rect x="25" y="28" width="470" height="274" rx="28" fill="url(#smartTable)" stroke="#F5C116" stroke-width="4"></rect>
+                <rect x="66" y="68" width="388" height="194" rx="18" fill="none" stroke="rgba(255,255,255,.28)" stroke-width="2"></rect>
+                <path d="M88 232 C 166 90, 292 270, 422 94" fill="none" stroke="#DDF7FF" stroke-width="4" stroke-dasharray="10 9" stroke-linecap="round"></path>
+                <path d="M92 236 L146 176 L213 202 L290 132 L420 96" fill="none" stroke="#F5C116" stroke-width="3" opacity=".88"></path>
+                <circle cx="92" cy="236" r="13" fill="#F4F6EA" stroke="#fff" stroke-width="3"></circle>
+                <circle cx="290" cy="132" r="12" fill="#F5C116" stroke="#fff" stroke-width="3"></circle>
+                <circle cx="420" cy="96" r="12" fill="#C80F1D" stroke="#fff" stroke-width="3"></circle>
+                <g fill="rgba(255,255,255,.86)" font-family="Inter" font-size="13" font-weight="700">
+                  <text x="72" y="54">Mesa completa detectada</text>
+                  <text x="332" y="284">Confianza 92%</text>
+                </g>
+              </svg>
+            </div>
+            <div style="padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+              <div style="background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 13px;">
+                <div style="font-size: 10.5px; color: #90A7D5; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;">Carambolas</div>
+                <div style="font-family: var(--cc-font-display); font-size: 30px; font-weight: 800; color: #fff; margin-top: 4px;">18</div>
+              </div>
+              <div style="background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 13px;">
+                <div style="font-size: 10.5px; color: #90A7D5; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;">AVG estimado</div>
+                <div style="font-family: var(--cc-font-display); font-size: 30px; font-weight: 800; color: var(--cc-amarillo-carambola); margin-top: 4px;">0.947</div>
+              </div>
+              <div style="background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.10); border-radius: 12px; padding: 13px;">
+                <div style="font-size: 10.5px; color: #90A7D5; font-weight: 800; text-transform: uppercase; letter-spacing: .07em;">QA</div>
+                <div style="font-size: 13px; color: #DCE6FA; line-height: 1.45; margin-top: 5px;">2 eventos bajo revision</div>
+              </div>
+            </div>
+          </div>
+          <div style="padding: 13px 18px; border-top: 1px solid rgba(255,255,255,.09); color: #AFC0DF; font-size: 12px;">Roadmap validado por spike tecnico: datos estimados, privados y auditables.</div>
         </div>
       </div>
     </div>
