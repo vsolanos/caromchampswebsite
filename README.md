@@ -36,7 +36,7 @@ rendimiento · Torneo de ranking · Mis juegos / My Games · Planillas IA · Mes
 Planes · Segmentos (5) · Marca · CTA · Footer.
 
 <!-- AUTO:ESTADO -->
-_Ultima actualizacion del contenido: 2026-06-26 · commit `13ccda1` — fix(landing): planes por defecto en tarifa mensual ($20/$50 /mes); Anual queda opcional_
+_Ultima actualizacion del contenido: 2026-06-28 · commit `0a90b8c` — feat(landing): presentar smart analytics en roadmap_
 <!-- /AUTO:ESTADO -->
 
 > El bloque "Ultima actualizacion del contenido" se regenera **automaticamente** en
