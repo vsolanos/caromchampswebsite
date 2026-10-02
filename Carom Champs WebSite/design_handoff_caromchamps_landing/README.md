@@ -350,8 +350,9 @@ legibles directamente como referencia de implementación.
   (o expórtala a imagen) — su contenido y estilos están en ese archivo.
 - **Copa Mundo CaromChamps** — formato insignia añadido como 12.ª función ("Copa Mundo CaromChamps") y al
   texto de "Múltiples formatos de campeonato". Flujo: clasificatorias configurables PrePreQualy → PreQualy →
-  Qualy → Cuadro Principal (48 jugadores) → KO 32 (eliminación simple desde 32). Grupos de 3-4, clasifican por
-  puntaje y promedio, 16 grupos de 4, clasifican 2 por grupo, sembrados directos + clasificados del Qualy.
+  Qualy → Cuadro Principal (48 jugadores) → KO 32 (eliminación simple desde 32). Fases previas en grupos de 3-4,
+  clasifican por puntaje y promedio; Cuadro Principal en 16 grupos de 3, clasifican 2 por grupo (= 32), con
+  sembrados directos + clasificados del Qualy.
 - **Sección "Solicitar demo" (`#demo`).** Agendamiento embebido con un **iframe de Google Calendar
   Appointment Scheduling** (`https://calendar.google.com/calendar/appointments/schedules/…?gv=true`,
   width 100% / height 600). **Todos los botones "Solicitar demo"** (nav, hero y CTA final) apuntan a `#demo`
