@@ -36,7 +36,7 @@ rendimiento · Torneo de ranking · Mis juegos / My Games · Planillas IA · Mes
 Planes · Segmentos (5) · Marca · CTA · Footer.
 
 <!-- AUTO:ESTADO -->
-_Ultima actualizacion del contenido: 2026-06-28 · commit `0a90b8c` — feat(landing): presentar smart analytics en roadmap_
+_Ultima actualizacion del contenido: 2026-10-01 · commit `66f7a72` — fix(copa-mundo): Cuadro Principal en 16 grupos de 3 (regla confirmada) (#1)_
 <!-- /AUTO:ESTADO -->
 
 > El bloque "Ultima actualizacion del contenido" se regenera **automaticamente** en
